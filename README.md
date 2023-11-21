@@ -26,14 +26,16 @@ I recommend the Linux Zen Kernel because it includes the ACS Patch as a kernel l
 #### Motherboard
 The X470 GAMING PLUS MAX serves as a good option for VFIO,  It's GPU/USB card IOMMU groups are as follows (all groups in the iommu file): 
 ```
-IOMMU Group 12:
-        12:00.0 VGA compatible controller [0300]: NVIDIA Corporation GP104 [GeForce GTX 1060 6GB] [10de:1b83] (rev a1)
+IOMMU Group 25:
+        23:00.0 Network controller [0280]: Intel Corporation Wi-Fi 6 AX200 [8086:2723] (rev 1a)
+IOMMU Group 26:
+        25:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
 IOMMU Group 13:
-        12:00.1 Audio device [0403]: NVIDIA Corporation GP104 High Definition Audio Controller [10de:10f0] (rev a1)
-IOMMU Group 24:
-        23:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
+        12:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA106 [GeForce RTX 3060 Lite Hash Rate] [10de:2504] (rev a1)
+IOMMU Group 14:
+        12:00.1 Audio device [0403]: NVIDIA Corporation GA106 High Definition Audio Controller [10de:228e] (rev a1)
 ```
-The RTX 3060 is fully isolated and works with the VM and the GTX 970 is not
+The RTX 3060 is fully isolated and works with the VM and the RX 580 is not
 
 #### Configuring hardware and dedicated drives
 Then a Virtio SCSI controller must be configured in virt-manager ('Add Hardware' -> 'Controller' -> 'SCSI'). Finally, you must go into the vm and install special drivers for the SCSI controller that should show up in Device Manager. Those drivers can be located in the iso [here](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/)
@@ -49,3 +51,5 @@ A blue screen for looking glass is simply displayed when the client is waiting f
 #### Getting Looking Glass working
 a link to the aur package for looking glasss is [here](https://aur.archlinux.org/packages/looking-glass). and a link to the Windows installer for the guest is [here](https://looking-glass.io/downloads). installing looking glass on the Windows guest will install the IVSHMEM Drivers needed for looking glass to work
 
+#### Scream Audio
+Scream is a network based sound device driver for Windows on Linux there is a client that you can run from the command line and you can install the driver in Windows which can be found [here](https://github.com/duncanthrax/scream). I recommend setting up a network bridge in Linux so you can do the command `scream -i <bridge_network>` and you should be able to get audio over a bridge network that runs internal to the system
