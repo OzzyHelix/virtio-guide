@@ -41,7 +41,6 @@ Then a Virtio SCSI controller must be configured in virt-manager ('Add Hardware'
 ### Looking Glass
 I use looking glass to interface with the VM
 Looking Glass is a powerful tool that allows Windows and Linux applications to live side by side, but requires a little extra configuration. (1920x1080) display. if you wanna use it on an ultrawide (2560x1080) display. you need to change the shared memory buffer to 64MB
-https://looking-glass.io/
 ```
 size unit='M'>64</size>
 ```
