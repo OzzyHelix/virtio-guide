@@ -1,5 +1,7 @@
 <domain xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" type="kvm">
   <name>win-vrchat</name>
+  <title>VRChat VM</title>
+  <description>VM For playing VRChat</description>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
@@ -25,7 +27,7 @@
     <emulatorpin cpuset="6,14"/>
   </cputune>
   <os>
-    <type arch="x86_64" machine="pc-q35-8.1">hvm</type>
+    <type arch="x86_64" machine="pc-q35-5.0">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.secboot.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/win-vrchat_VARS.fd</nvram>
     <bootmenu enable="yes"/>
@@ -55,9 +57,9 @@
     <smm state="on"/>
     <ioapic driver="kvm"/>
   </features>
-  <cpu mode="host-passthrough" check="none" migratable="off">
+  <cpu mode="custom" match="exact" check="none">
+    <model fallback="allow">EPYC-Rome</model>
     <topology sockets="1" dies="1" cores="6" threads="2"/>
-    <cache mode="passthrough"/>
     <feature policy="require" name="invtsc"/>
     <feature policy="require" name="topoext"/>
     <feature policy="disable" name="hypervisor"/>
@@ -87,6 +89,7 @@
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="raw" cache="writeback"/>
+      <source file="/home/ozzy/Documents/OS-ImageFiles/ISOs/virtio-win-0.1.240.iso"/>
       <target dev="sdb" bus="sata"/>
       <readonly/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
@@ -99,7 +102,7 @@
       <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
     </disk>
     <disk type="file" device="disk">
-      <driver name="qemu" type="qcow2"/>
+      <driver name="qemu" type="qcow2" cache="writeback"/>
       <source file="/mnt/m2vdisk/m2vdisk.qcow2"/>
       <target dev="vdb" bus="virtio"/>
       <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
@@ -175,6 +178,16 @@
       <target chassis="13" port="0xc"/>
       <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x4"/>
     </controller>
+    <controller type="pci" index="14" model="pcie-root-port">
+      <model name="pcie-root-port"/>
+      <target chassis="14" port="0xd"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x5"/>
+    </controller>
+    <controller type="pci" index="15" model="pcie-root-port">
+      <model name="pcie-root-port"/>
+      <target chassis="15" port="0xe"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x6"/>
+    </controller>
     <controller type="virtio-serial" index="0">
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
@@ -224,26 +237,26 @@
       <source>
         <address domain="0x0000" bus="0x23" slot="0x00" function="0x0"/>
       </source>
+      <rom bar="on"/>
       <address type="pci" domain="0x0000" bus="0x09" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x12" slot="0x00" function="0x0"/>
+        <address domain="0x0000" bus="0x25" slot="0x00" function="0x0"/>
+      </source>
+      <address type="pci" domain="0x0000" bus="0x0d" slot="0x00" function="0x0"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="pci" managed="yes">
+      <source>
+        <address domain="0x0000" bus="0x13" slot="0x00" function="0x0"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x12" slot="0x00" function="0x1"/>
+        <address domain="0x0000" bus="0x13" slot="0x00" function="0x1"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x0bda"/>
-        <product id="0x8771"/>
-      </source>
-      <address type="usb" bus="0" port="1"/>
     </hostdev>
     <watchdog model="itco" action="reset"/>
     <memballoon model="virtio">

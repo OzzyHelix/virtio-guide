@@ -1,5 +1,7 @@
 <domain xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" type="kvm">
   <name>win-gvr</name>
+  <title>Work VM</title>
+  <description>This VM is for working on stuff and for games other than VRChat</description>
   <metadata>
     <libosinfo:libosinfo xmlns:libosinfo="http://libosinfo.org/xmlns/libvirt/domain/1.0">
       <libosinfo:os id="http://microsoft.com/win/10"/>
@@ -88,7 +90,7 @@
     </disk>
     <disk type="file" device="cdrom">
       <driver name="qemu" type="raw" cache="writeback"/>
-      <source file="/home/ozzy/Downloads/virtio-win-0.1.240.iso"/>
+      <source file="/home/ozzy/Documents/OS-ImageFiles/ISOs/virtio-win-0.1.240.iso"/>
       <target dev="sdb" bus="sata"/>
       <readonly/>
       <address type="drive" controller="0" bus="0" target="0" unit="1"/>
@@ -189,7 +191,7 @@
     <interface type="bridge" trustGuestRxFilters="yes">
       <mac address="52:54:00:ec:3a:65"/>
       <source bridge="ozzynet"/>
-      <model type="virtio-net-pci"/>
+      <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
     </interface>
     <channel type="unix">
@@ -230,22 +232,15 @@
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x12" slot="0x00" function="0x0"/>
+        <address domain="0x0000" bus="0x13" slot="0x00" function="0x0"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
     </hostdev>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
-        <address domain="0x0000" bus="0x12" slot="0x00" function="0x1"/>
+        <address domain="0x0000" bus="0x13" slot="0x00" function="0x1"/>
       </source>
       <address type="pci" domain="0x0000" bus="0x07" slot="0x00" function="0x0"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x0bda"/>
-        <product id="0x8771"/>
-      </source>
-      <address type="usb" bus="0" port="1"/>
     </hostdev>
     <watchdog model="itco" action="reset"/>
     <memballoon model="virtio">
