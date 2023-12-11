@@ -35,7 +35,7 @@ IOMMU Group 13:
 IOMMU Group 14:
         12:00.1 Audio device [0403]: NVIDIA Corporation GA106 High Definition Audio Controller [10de:228e] (rev a1)
 ```
-The RTX 3060 is fully isolated and works with the VM and the RX 580 is not
+The RTX 3060 is fully isolated and works with the VM and the RX 6600 is not
 
 #### Configuring hardware and dedicated drives
 Then a Virtio SCSI controller must be configured in virt-manager ('Add Hardware' -> 'Controller' -> 'SCSI'). Finally, you must go into the vm and install special drivers for the SCSI controller that should show up in Device Manager. Those drivers can be located in the iso [here](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/)
