@@ -11,7 +11,7 @@ The draw back its not the best solution for apps that use anti-cheat software to
 ### System Specs
 * **Motherboard:** MSI X470 GAMING PLUS MAX
 * **CPU:** Ryzen 7 5700G @ Stock
-* **RAM:** 2 x 16GB (32GB) @ 3000 MHZ
+* **RAM:** 2 x 16GB (32GB) @ 3600 MHZ CL18
 * **GPU1 (Host):** PowerColor Figher RX 6600 8GB @ Stock
 * **GPU2 (Guest):** Zotac RTX 3060 12GB @ Stock
 * **Storage:** 1 x 1TB WD BLUE SSD, 1 x 500GB PNY SSD, 2 x 3TB Toshiba HDD*
