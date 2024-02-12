@@ -72,8 +72,10 @@ Next, you need to make some changes to the libvirtd configuration file located a
 `sudo nano /etc/libvirt/libvirtd.conf`
 Locate and uncomment the following lines and remove the pound (#) symbol you can search for these lines by using Ctrl+W in nano
 
-`unix_sock_group = "libvirt"
-unix_sock_rw_perms = "0770"`
+`unix_sock_group = "libvirt"`
+
+`unix_sock_rw_perms = "0770"`
+
 hit ctrl+o to save the file and exit
 
 now add your user to the libvirt group
