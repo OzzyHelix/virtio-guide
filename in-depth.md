@@ -5,7 +5,7 @@
 this guide will be done on Arch Linux so any Arch based distro might work and this is how to setup a VM
 
 ### Installing Copying Configs and getting patched kernel
-copy the configs from 
+download the configs from 
 https://github.com/OzzyHelix/virtio-guide/tree/main/configs
 for Dracut just copy the config and run `sudo dracut-rebuild`
 after you copy the configs you will need a kernel with the acs patch its better to have the acs patch enabled than to worry about IOMMU groups being messed up
