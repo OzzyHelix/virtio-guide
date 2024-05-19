@@ -1,4 +1,4 @@
-# Ozzy's Guide to KVM/QEMU
+# Ozzy's Guide to KVM/QEMU Private Version
 #### Config files and Guide
 
 ![Image of VFIO Setup](vfio.png)
@@ -7,6 +7,8 @@
 VFIO allows people to run Windows for apps that simply can't run in Linux. Its a good solution for app compatibility. Its not perfect but it would allow people to run games and apps that will not run in Wine or Steam Proton.
 The draw back its not the best solution for apps that use anti-cheat software to protect multiplayer experiences.
 
+# Note
+this contains UUIDs for my VMs its meant to be private so I can't lose Windows keys to people copying my VMs
 
 ### System Specs
 * **Motherboard:** MPG X670E CARBON WIFI
@@ -18,11 +20,7 @@ The draw back its not the best solution for apps that use anti-cheat software to
 * **OS (Guest):** Windows 11 Pro
 * **OS (Host):** Arch Linux running on the Linux Zen Kernel
 
-*Host on the WD Blue drive and Guest drives are stored on SSDs and HDDs serving as a backup drive.*
-
-* Here is a hardware probe of my system for all that info you could want
-
-https://linux-hardware.org/?probe=6054ca281a
+*Host on the WD Blue drive and Guest drives are stored on an SSD and HDD with the other HDD serving as a backup drive.*
 
 ### Troubleshooting
 ### Zen Kernel and ACS Patch
