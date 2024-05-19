@@ -20,6 +20,10 @@ The draw back its not the best solution for apps that use anti-cheat software to
 
 *Host on the WD Blue drive and Guest drives are stored on an SSD and HDD with the other HDD serving as a backup drive.*
 
+* Here is a hardware probe of my system for all that info you could want
+
+https://linux-hardware.org/?probe=6054ca281a
+
 ### Troubleshooting
 ### Zen Kernel and ACS Patch
 I recommend the Linux Zen Kernel because it includes the ACS Patch as a kernel launch option in your bootloader of choice that flag being `pcie_acs_override=downstream,multifunction`
