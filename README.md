@@ -22,6 +22,10 @@ this contains UUIDs for my VMs its meant to be private so I can't lose Windows k
 
 *Host on the WD Blue drive and Guest drives are stored on an SSD and HDD with the other HDD serving as a backup drive.*
 
+* here is a hardware probe to give you a better idea of my system
+
+   https://linux-hardware.org/?probe=24b608f168
+
 ### Troubleshooting
 ### Zen Kernel and ACS Patch
 I recommend the Linux Zen Kernel because it includes the ACS Patch as a kernel launch option in your bootloader of choice that flag being `pcie_acs_override=downstream,multifunction`
