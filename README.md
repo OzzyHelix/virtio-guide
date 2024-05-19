@@ -18,7 +18,7 @@ The draw back its not the best solution for apps that use anti-cheat software to
 * **OS (Guest):** Windows 11 Pro
 * **OS (Host):** Arch Linux running on the Linux Zen Kernel
 
-*Host on the WD Blue drive and Guest drives are stored on an SSD and HDD with the other HDD serving as a backup drive.*
+*Host on the WD Blue drive and Guest drives are stored on SSDs and HDDs serving as a backup drive.*
 
 * Here is a hardware probe of my system for all that info you could want
 
