@@ -1,1 +1,5 @@
-So when dealing with archinstall from arch linux direct you make come to failed install due to unknown reasons, you may have to run gdisk /dev/whateverdisk to delete all partions on that drive, and then run cgdisk /dev/whateverdisk to make the partions, then mkfs.fat -F32 /dev/whateverdisk and mkfs.ext4 /dev/whateverdisk cause it sometimes just like to fails in weird ways.
+So when dealing with archinstall from arch linux direct you make come to failed install due to unknown reasons, 
+you may have to run gdisk /dev/whateverdisk to delete all partions on that drive, and 
+then run cgdisk /dev/whateverdisk to make the partions, 
+then mkfs.fat -F32 /dev/whateverdisk and 
+mkfs.ext4 /dev/whateverdisk cause it sometimes just like to fails in weird ways.
