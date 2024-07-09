@@ -3,7 +3,7 @@ I have been experimenting with hostapd and my WiFi card to connect my Quest dire
 If you still want to give this setup a try, here are some requirements:
 
    * Network Bridge: You must use a network bridge with your Ethernet adapter. This can be set up in Cockpit using its web UI.
-   * WiFi Card Requirements: You need a WiFi card that supports WiFi 5 (802.11ac) or WiFi 6 (802.11ax). Note that you won’t be able to use this card for WiFi connections other than the hotspot.
+   * WiFi Card Requirements: You need a WiFi card that supports WiFi 5 (802.11ac) and WiFi 6 (802.11ax). Note that you won’t be able to use this card for WiFi connections other than the hotspot.
    * Networking Knowledge: You should have a good understanding of networking in Linux.
 
 If you meet these requirements, you can edit the hostapd.conf file to include your SSID and password for the hotspot and change the country code if necessary. and add the interface/wifi adpator you want to use for the hotspot as well as the ethernet bridge name Then, copy the file to `/etc/hostapd/hostapd.conf`.
