@@ -115,7 +115,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```bash
      sudo nano /etc/libvirt/qemu.conf
      ```
-   - Uncomment:
+   - Uncomment or Add:
      ```bash
      user = "your-username"
      ```
