@@ -54,6 +54,8 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```
 
 3. **Editing `vfio.conf`**
+   doing this will bind the PCIE devices to the vfio-pci driver with their PCIE ID this means you can't use them in Linux they will be setup to be attached to a VM
+   to proceed
    - Command:
      ```bash
      sudo nano /etc/modprobe.d/vfio.conf
@@ -72,24 +74,28 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      grep -Ec '(vmx|svm)' /proc/cpuinfo
      ```
      if the output is greater than zero then you are good
+     if the output is less than zero you need to enable vmx or svm in your BIOS/UEFI firmware
      
 2. **Install Required Packages**
+   this is stuff needed for running VMs in general so we will install this
    - Command:
      ```bash
      sudo pacman -Sy qemu-full virt-manager virt-viewer dnsmasq bridge-utils libguestfs ebtables vde2 openbsd-netcat
      ```
 
-3. **Configure libvirtd Service**
+4. **Configure libvirtd Service**
+   we need to enable the libvirt service so we will do that
    - Enable and start the service:
      ```bash
      sudo systemctl enable --now libvirtd.service
      ```
-   - Check status:
+   - we will check its status:
      ```bash
      sudo systemctl status libvirtd.service
      ```
 
-4. **Edit `libvirtd.conf`**
+6. **Edit `libvirtd.conf`**
+   we now need to edit the libvirtd.conf
    - Command:
      ```bash
      sudo nano /etc/libvirt/libvirtd.conf
@@ -101,7 +107,8 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```
    - Save and exit.
 
-5. **Add User to `libvirt` Group**
+8. **Add User to `libvirt` Group**
+   we will now add your user to the libvirt
    - Command:
      ```bash
      sudo usermod -aG libvirt $USER
@@ -170,7 +177,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
    - Open your VM, add hardware, and select PCI Host Device for the provisioned vfio-pci.
 
 ### CPU Pinning
-
+you need to do this to make you phyical cores be assigned to your virtual cores that way your VM runs with good performance
 1. **Determine CPU Layout**
    - Command:
      ```bash
@@ -192,7 +199,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```
 
 ### Anti-Cheat Compatibility
-
+we do this so games like VRChat will run in our VM
 1. **Edit XML Configuration**
    - Add to `<os>`:
      ```xml
@@ -220,7 +227,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
    this tells any anti cheat software that its running under Microsoft Hv or Hyper V and will basically trick any anti cheat software into thinking its running on Microsoft's solution 
 
 ### Installing Looking Glass
-
+this will let us access our VM from our Linux desktop
 1. **Configure Shared Memory Buffer**
    - Add before `</devices>`:
      ```xml
