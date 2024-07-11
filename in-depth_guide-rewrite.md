@@ -108,7 +108,20 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```
    - Save and exit.
 
-8. **Add User to `libvirt` Group**
+7. **Edit `qemu.conf`**
+
+   we now need to edit the `/etc/libvirt/qemu.conf` to add your user to it so you can pass your mic to the VM so in the event you want to use your mic on the VM you can
+   - Command:
+     ```bash
+     sudo nano /etc/libvirt/qemu.conf
+     ```
+   - Uncomment:
+     ```bash
+     user = "your-username"
+     ```
+   - Save and exit.
+
+9. **Add User to `libvirt` Group**
    we will now add your user to the libvirt
    - Command:
      ```bash
