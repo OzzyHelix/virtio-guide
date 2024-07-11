@@ -10,22 +10,24 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
 
 1. **Download Configs**
    - Get the configs from [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
+   - copy them to the directories that the configs folder mimicks
 
 2. **Dracut Configuration**
-   - Copy the config and run:
+   if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
+   - Copy the config files to `/etc/dracut.conf.d` and run:
      ```bash
      sudo dracut-rebuild
      ```
 
-3. **Patched Kernel**
-   - Options:
+4. **Patched Kernel**
+   - Here are your options:
      - Install the `linux-zen` and `linux-zen-headers`.
      - Install `linux-vfio-lts` and `linux-vfio-lts-headers`.
      - Patch the kernel yourself.
 
 ### Editing the Configs
 
-1. **IOMMU Situation**
+1. **The IOMMU Situation**
    - Use this script to figure out your IOMMU situation:
      ```bash
      #!/bin/bash
@@ -67,7 +69,8 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```bash
      grep -Ec '(vmx|svm)' /proc/cpuinfo
      ```
-
+     if the output is greater than zero then you are good
+     
 2. **Install Required Packages**
    - Command:
      ```bash
@@ -137,7 +140,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
 
 1. **Windows Installation**
    - Proceed with a standard Windows installation.
-   - Post-installation, install the guest tooling from [Fedora](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win-0.1.240.iso).
+   - Post-installation, install the guest tooling from [virtio-win-iso]([https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win-0.1.240.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.248-1/virtio-win-0.1.248.iso)).
 
 2. **Install Scream**
    - On Windows, run the provided PowerShell script:
@@ -150,12 +153,14 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```
 
 3. **Configure Network for Scream**
-   - Set up a network bridge or NAT on the VM.
-   - Run:
+   - Set up a network bridge or NAT on the VM. this can be done with cockpit
+   - to install cockpit run `sudo pacman -Sy cockpit && sudo systemctl enable --now cockpit.socket`
+   - you can then go to http://localhost:9090 in your browser and go to the networking tab and create a network bridge with your ethernet adaptor
+   - Once you've done that run:
      ```bash
      scream -i <virtual_network>
      ```
-   - Optionally, create a bash alias for convenience.
+   - Optionally, create a bash alias for convenience or create a script and have it start with your desktop.
 
 ### Attaching Hardware to the VM
 
