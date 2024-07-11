@@ -29,6 +29,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
 ### Editing the Configs
 
 1. **The IOMMU Situation**
+   - you will grab your PCIE IDS from here save them to a text file or something you'll need them for the next step. They look like this `[10de:228e]`
    - Use this script to figure out your IOMMU situation:
      ```bash
      #!/bin/bash
@@ -52,7 +53,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
              12:00.1 Audio device [0403]: NVIDIA Corporation GA106 High Definition Audio Controller [10de:228e] (rev a1)
      ```
 
-2. **Editing `vfio.conf`**
+3. **Editing `vfio.conf`**
    - Command:
      ```bash
      sudo nano /etc/modprobe.d/vfio.conf
