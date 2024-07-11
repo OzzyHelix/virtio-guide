@@ -74,7 +74,8 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      grep -Ec '(vmx|svm)' /proc/cpuinfo
      ```
      if the output is greater than zero then you are good
-     if the output is less than zero you need to enable vmx or svm in your BIOS/UEFI firmware
+
+    if the output is less than zero you need to enable vmx or svm in your BIOS/UEFI firmware
      
 2. **Install Required Packages**
    this is stuff needed for running VMs in general so we will install this
