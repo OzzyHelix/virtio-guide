@@ -1,268 +1,266 @@
-### Ozzy's In Depth Guide to KVM/QEMU
-## Config files and Guide
+
+# Ozzy's In-Depth Guide to KVM/QEMU
+
+## Config Files and Guide
 
 ### Starting Point
-this guide will be done on Arch Linux so any Arch based distro might work and this is how to setup a VM
+This guide is tailored for Arch Linux and similar Arch-based distributions. Follow these steps to set up a VM.
 
-### Installing Copying Configs and getting patched kernel
-download the configs from 
-https://github.com/OzzyHelix/virtio-guide/tree/main/configs
-for Dracut just copy the config and run `sudo dracut-rebuild`
-after you copy the configs you will need a kernel with the acs patch its better to have the acs patch enabled than to worry about IOMMU groups being messed up
-this can be done with the zen kernel by installing the `linux-zen` and `linux-zen-headers` or you can use an lts vfio kernel so you could install `linux-vfio-lts` and `linux-vfio-lts-headers` insted of the zen kernel packages.
-the thrid option is to patch the kernel yourself
+### Installing, Copying Configs, and Getting a Patched Kernel
 
-### EDITING THE CONFIGS you need to run
-First you need to figure out your IOMMU Sitution 
-it can be done with this script
-```
-#!/bin/bash
-shopt -s nullglob
-for g in $(find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V); do
-    echo "IOMMU Group ${g##*/}:"
-    for d in $g/devices/*; do
-        echo -e "\t$(lspci -nns ${d##*/})"
-    done;
-done;
-```
-the output should look something like this
-```
-IOMMU Group 25:
-        23:00.0 Network controller [0280]: Intel Corporation Wi-Fi 6 AX200 [8086:2723] (rev 1a)
-IOMMU Group 26:
-        25:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
-IOMMU Group 13:
-        12:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA106 [GeForce RTX 3060 Lite Hash Rate] [10de:2504] (rev a1)
-IOMMU Group 14:
-        12:00.1 Audio device [0403]: NVIDIA Corporation GA106 High Definition Audio Controller [10de:228e] (rev a1)
-```
-then from that you can find your PCIE IDs in the IOMMU groups the ids look something like this `8086:2723`
-so after copying all the configs to your system do this command
-`sudo nano /etc/modprobe.d/vfio.conf`
-on the line that says `options vfio-pci ids=` you add the PCIE ids for the stuff you want to add to the VM (note once bound th vfio-pci you can't use it in Linux with anything only the VM can use it)
+1. **Download Configs**
+   - Get the configs from [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
+   - copy them to the directories that the configs folder mimicks
+   - you'll need to edit those configs to fit your system check to make sure they work for you
 
+2. **Dracut Configuration**
+   if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
+   - Copy the config files to `/etc/dracut.conf.d` and run:
+     ```bash
+     sudo dracut-rebuild
+     ```
 
+4. **Patched Kernel**
+   - Here are your options:
+     - Install the `linux-zen` and `linux-zen-headers`.
+     - Install `linux-vfio-lts` and `linux-vfio-lts-headers`.
+     - Patch the kernel yourself.
 
-### installing and setting up Libvirt and KVM/QEMU 
-first make sure you have SVM enabled in your BIOS and you will have to find an Intel equal to SVM this won't work without it
-Step 1: Check if Virtualization Is Enabled
+### Editing the Configs
 
-```grep -Ec '(vmx|svm)' /proc/cpuinfo```
+1. **The IOMMU Situation**
+   - you will grab your PCIE IDS from here save them to a text file or something you'll need them for the next step. They look like this `[10de:228e]`
+   - Use this script to figure out your IOMMU situation:
+     ```bash
+     #!/bin/bash
+     shopt -s nullglob
+     for g in $(find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V); do
+         echo "IOMMU Group ${g##*/}:"
+         for d in $g/devices/*; do
+             echo -e "	$(lspci -nns ${d##*/})"
+         done;
+     done;
+     ```
+   - Example output:
+     ```
+     IOMMU Group 25:
+             23:00.0 Network controller [0280]: Intel Corporation Wi-Fi 6 AX200 [8086:2723] (rev 1a)
+     IOMMU Group 26:
+             25:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
+     IOMMU Group 13:
+             12:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA106 [GeForce RTX 3060 Lite Hash Rate] [10de:2504] (rev a1)
+     IOMMU Group 14:
+             12:00.1 Audio device [0403]: NVIDIA Corporation GA106 High Definition Audio Controller [10de:228e] (rev a1)
+     ```
 
-If it's greater than 0, then virtualization is enabled and you can safely continue.
-Step 2: Install the Required KVM Packages
+3. **Editing `vfio.conf`**
+   doing this will bind the PCIE devices to the vfio-pci driver with their PCIE ID this means you can't use them in Linux they will be setup to be attached to a VM
+   to proceed
+   - Command:
+     ```bash
+     sudo nano /etc/modprobe.d/vfio.conf
+     ```
+   - Add the PCIe IDs to the line:
+     ```bash
+     options vfio-pci ids=<PCIe IDs>
+     ```
 
-`sudo pacman -Sy qemu-full virt-manager virt-viewer dnsmasq bridge-utils libguestfs ebtables vde2 openbsd-netcat`
+### Installing and Setting Up Libvirt and KVM/QEMU
 
-Enter Y when prompted for confirmation.
+1. **Enable Virtualization**
+   - Ensure SVM is enabled in your BIOS.
+   - Check:
+     ```bash
+     grep -Ec '(vmx|svm)' /proc/cpuinfo
+     ```
+     if the output is greater than zero then you are good
 
-Step 3: Configure the libvirtd Service 
+     if the output is less than one you need to enable vmx or svm in your BIOS/UEFI firmware
+     
+2. **Install Required Packages**
+   this is stuff needed for running VMs in general so we will install this
+   - Command:
+     ```bash
+     sudo pacman -Sy qemu-full virt-manager virt-viewer dnsmasq bridge-utils libguestfs ebtables vde2 openbsd-netcat
+     ```
 
-`sudo systemctl enable --now libvirtd.service`
+4. **Configure libvirtd Service**
+   we need to enable the libvirt service so we will do that
+   - Enable and start the service:
+     ```bash
+     sudo systemctl enable --now libvirtd.service
+     ```
+   - we will check its status:
+     ```bash
+     sudo systemctl status libvirtd.service
+     ```
 
-enables and starts it
+6. **Edit `libvirtd.conf`**
+   we now need to edit the libvirtd.conf
+   - Command:
+     ```bash
+     sudo nano /etc/libvirt/libvirtd.conf
+     ```
+   - Uncomment:
+     ```bash
+     unix_sock_group = "libvirt"
+     unix_sock_rw_perms = "0770"
+     ```
+   - Save and exit.
 
-Check if libvirtd is currently running using the status command:
+7. **Edit `qemu.conf`**
 
-`sudo systemctl status libvirtd.service`
+   we now need to edit the `/etc/libvirt/qemu.conf` to add your user to it so you can pass your mic to the VM so in the event you want to use your mic on the VM you can
+   - Command:
+     ```bash
+     sudo nano /etc/libvirt/qemu.conf
+     ```
+   - Uncomment or Add:
+     ```bash
+     user = "your-username"
+     ```
+   - Save and exit.
 
-The output should display the active (running) status in green. If it shows inactive (dead), issue the systemctl start command again.
-
-Next, you need to make some changes to the libvirtd configuration file located at /etc/libvirt/libvirtd.conf. Open the file using nano (or your preferred text editor):
-`sudo nano /etc/libvirt/libvirtd.conf`
-Locate and uncomment the following lines and remove the pound (#) symbol you can search for these lines by using Ctrl+W in nano
-
-`unix_sock_group = "libvirt"`
-
-`unix_sock_rw_perms = "0770"`
-
-hit ctrl+o to save the file and exit
-
-now add your user to the libvirt group
-
-`sudo usermod -aG libvirt $USER`
-
-then restart libvirt
-
-`systemctl restart libvirtd.service`
-
-(note) you might need to replace my username "ozzy" in the config files if you use them
+9. **Add User to `libvirt` Group**
+   we will now add your user to the libvirt
+   - Command:
+     ```bash
+     sudo usermod -aG libvirt $USER
+     ```
+   - Restart libvirt:
+     ```bash
+     sudo systemctl restart libvirtd.service
+     ```
 
 ### Creating the VM
-We're ready to begin creating our VM. 
 
-Go ahead and start virt-manager from your list of applications. Select the button on the top left of the GUI to create a new VM:
+1. **Launch virt-manager**
+   - Open `virt-manager` from your applications list.
+   - Create a new VM and select "Local install media".
+   - Navigate to your ISO directory, e.g., `/home/user/.iso`.
 
-<div align="center">
-    <img src="./img/virtman_1.png" width="450">
-</div><br>
+2. **Configure VM Settings**
+   - Adjust RAM and CPU settings.
+   - Enable storage for the VM by creating a storage pool for `qcow2` images.
 
-Select the "Local install media" option. My ISOs are stored in my home directory `/home/user/.iso`, so I'll create a new pool and select the Windows 10 ISO from there:
+3. **Advanced Configuration**
+   - On the Overview page, select:
+     ```
+     UEFI x86_64: /usr/share/OVMF/OVMF_CODE.fd
+     ```
+   - Set CPU options to:
+     ```
+     host-passthrough
+     Enable available CPU security flaw mitigations
+     ```
+   - Add virtIO drivers and configure NIC for improved performance.
 
-<div align="center">
-    <img src="./img/virtman_2.png" width="450">
-</div><br>
+4. **Passthrough Devices**
+   - Add PCI Host Devices corresponding to your GPU and other components.
+   - Ensure boot options are set correctly.
 
-Configure some custom RAM and CPU settings for your VM:
+### Installing Windows and Additional Software
 
-<div align="center">
-    <img src="./img/virtman_3.png" width="450">
-</div><br>
+1. **Windows Installation**
+   - Proceed with a standard Windows installation.
+   - Post-installation, install the guest tooling from [virtio-win-iso]([https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win-0.1.240.iso](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.248-1/virtio-win-0.1.248.iso)).
 
-Next, the GUI asks us whether we want to enable storage for the VM. you create a storage pool and do it on the drive you want to storage your qcow2 images
+2. **Install Scream**
+   - On Windows, run the provided PowerShell script:
+     ```powershell
+     https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/scripts/install-screams.ps1
+     ```
+   - On Linux, install Scream using:
+     ```bash
+     yay -Sy scream
+     ```
 
-<div align="center">
-    <img src="./img/virtman_4.png" width="450">
-</div><br>
+3. **Configure Network for Scream**
+   - Set up a network bridge or NAT on the VM. this can be done with cockpit
+   - to install cockpit run `sudo pacman -Sy cockpit && sudo systemctl enable --now cockpit.socket`
+   - you can then go to http://localhost:9090 in your browser and go to the networking tab and create a network bridge with your ethernet adaptor
+   - Once you've done that run:
+     ```bash
+     scream -i <virtual_network>
+     ```
+   - Optionally, create a bash alias for convenience or create a script and have it start with your desktop.
 
-On the last step, review your settings and select a name for your VM. Make sure to select the checkbox "Customize configuration before installation" and click Finish:
+### Attaching Hardware to the VM
 
-<div align="center">
-    <img src="./img/virtman_5.png" width="450">
-</div><br>
+1. **Using Virt-Manager**
+   - Open your VM, add hardware, and select PCI Host Device for the provisioned vfio-pci.
 
-A new window should appear with more advanced configuration options. You can alter these options through the GUI or the associated libvirt XML settings. Make sure that on the Overview page under Firmware you select `UEFI x86_64: /usr/share/OVMF/OVMF_CODE.fd`:
+### CPU Pinning
+you need to do this to make you phyical cores be assigned to your virtual cores that way your VM runs with good performance
+1. **Determine CPU Layout**
+   - Command:
+     ```bash
+     lstopo --of console -p
+     ```
 
-<div align="center">
-    <img src="./img/virtman_6.png" width="450">
-</div><br>
+2. **Pin CPU Threads**
+   - Example configuration:
+     ```xml
+     <vcpupin vcpu='0' cpuset='0'/>
+     <vcpupin vcpu='1' cpuset='6'/>
+     <!-- Add more pairs as needed -->
+     ```
 
-Go to the CPUs page and remove the check next to `Copy host CPU configuration` and under Model type `host-passthrough`. Also make sure to check the option for `Enable available CPU security flaw mitigations` to prevent against Spectre/Meltdown vulnerabilities.
+3. **Set CPU Governors to Performance**
+   - Command:
+     ```bash
+     for i in /sys/devices/system/cpu/cpufreq/policy*/scaling_governor; do echo performance | sudo tee $i; done
+     ```
 
-<div align="center">
-    <img src="./img/virtman_7.png" width="450">
-</div><br>
+### Anti-Cheat Compatibility
+we do this so games like VRChat will run in our VM
+1. **Edit XML Configuration**
+   - Add to `<os>`:
+     ```xml
+     <smbios mode='host'/>
+     ```
+   - Add to `<features>`
+     ```xml
+     <vpindex state="on"/>
+     <runtime state="on"/>
+     <stimer state="on"/>
+     <reset state="on"/>
+     ```
 
-I've chosen to remove several of the menu options that won't be useful to my setup (feel free to keep them if you'd like):
+   - Add to just under `<features>`
+     ```xml
+      <kvm> 
+       <hidden state='on'/> 
+      </kvm>
+     ```
+   - Add to `<cpu>`:
+     ```xml
+     <feature policy='disable' name='hypervisor'/>
+     ```
+3. you need enable Hyper-V in Windows to hide the Linux Hypervisor
+   this tells any anti cheat software that its running under Microsoft Hv or Hyper V and will basically trick any anti cheat software into thinking its running on Microsoft's solution 
 
-<div align="center">
-    <img src="./img/virtman_8.png" width="450">
-</div><br>
+### Installing Looking Glass
+this will let us access our VM from our Linux desktop
+1. **Configure Shared Memory Buffer**
+   - Add before `</devices>`:
+     ```xml
+     <shmem name="looking-glass">
+       <model type="ivshmem-plain"/>
+       <size unit="M">64</size>
+     </shmem>
+     ```
 
-Let's add the <span name="virtio-iso">virtIO drivers</span>. Click 'Add Hardware' and under 'Storage', create a custom storage device of type `CDROM`. Make sure to locate the ISO image for the virtIO drivers from earlier:
+2. **Install Looking Glass on Linux**
+   - Use AUR helper:
+     ```bash
+     yay -Sy looking-glass looking-glass-module-dkms
+     ```
 
-<div align="center">
-    <img src="./img/virtman_9.png" width="450">
-</div><br>
+3. **Install Looking Glass on Windows**
+   - Download and install from [Looking Glass](https://looking-glass.io/downloads).
 
-Under the NIC menu, change the device model to `virtIO` for improved networking performance:
+### Finishing Windows Setup
 
-<div align="center">
-    <img src="./img/virtman_10.png" width="450">
-</div><br>
-
-Now it's time to configure our passthrough devices! Click 'Add Hardware' and under 'PCI Host Device', select the Bus IDs corresponding to your GPU.
-
-<div align="center">
-    <img src="./img/virtman_11.png" width="450">
-</div><br>
-
-Make sure to repeat this step for all the devices associated with your GPU in the same IOMMU group (usually VGA, audio controller, etc.):
-
-<div align="center">
-    <img src="./img/virtman_12.png" width="450">
-</div><br>
-
-Then under the 'Boot Options' menu, I added a check next to `Enable boot menu` and reorganized the devices so that I could boot directly from the 1TB SSD:
-
-<div align="center">
-    <img src="./img/virtman_14.png" width="450">
-</div><br>
-
-make sure to VGA Video on the VM so we can control it
-![image](https://github.com/OzzyHelix/virtio-guide/assets/29835364/f4514a8a-68ff-4831-8e78-f6c90dde492e)
-
-then install Windows like you would on a PC
-
-once you have Windows installed you are going to have to install the guest tooling the iso is linked here
-https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.240-1/virtio-win-0.1.240.iso
-
-after installing the guest tooling we are going to install scream
-
-### Installing Scream
-Scream has some cert issues because of Windows licensing prices it is safe but this script fixes it so it can install so run this in powershell as admin on Windows 
-https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/scripts/install-screams.ps1
-
-as for Linux we need to install Scream from the AUR so I will recommend yay
-yay -Sy scream
- ### Settings Scream up on the host
- we need to set a network bridge or nat on the VM so open virt manager and go to edit and then Connection Details from there Virtual Networks in there you hit the plus button (+)
- <div align="center">
-    <img src="./img/scream1.png" width="450">
-</div><br>
- <div align="center">
-    <img src="./img/scream2.png" width="450">
-</div><br>
- 
-from there you setup your network virtual network
-to run scream for the VM you need to run ifconfig and find the virtual netowrk it might be like virbr0 vrirbr1 etc
-and you just run in the terminal 
-scream -i <virtual_network>
-you probably don't want to type that every time so I suggest a bash alias
-
-### Attaching hardware to the VM
-in Virt-Manager right click on your VM and click Open from that click on add hardware then go to PCIE Host Device and Select the Hardware you provisioned for vfio-pci earlier 
- <div align="center">
-    <img src="./img/hardware1.png" width="450">
-</div><br>
- <div align="center">
-    <img src="./img/hardware2.png" width="450">
-</div><br>
- ### CPU Pinning 
-Run `lstopo --of console -p` to see how your CPU is laid out 
-Now pin the threads in pairs like this (don't just copy. For you the pairs might be like: 0,8; 1,9; 2,10; ... or different):
-
-`<vcpupin vcpu='0' cpuset='0'/>`
-`<vcpupin vcpu='1' cpuset='6'/>`
-`<vcpupin vcpu='2' cpuset='1'/>`
-`<vcpupin vcpu='3' cpuset='7'/>`
-`<vcpupin vcpu='4' cpuset='2'/>`
-`<vcpupin vcpu='5' cpuset='8'/>`
-`<vcpupin vcpu='6' cpuset='3'/>`
-`<vcpupin vcpu='7' cpuset='9'/>`
-`<vcpupin vcpu='8' cpuset='4'/>`
-`<vcpupin vcpu='9' cpuset='10'/>`
-Don't pin emulatorpin and iothreadpin to CPUs that you pass to the vm. If you pass all CPUs leave iothreadpin and emulatorpin out. 
-if you have 6 cores / 12 threads and pass only 5 cores / 10 threads, leaving 1 core / 2 threads for iothreadpin and emulatorpin. This gives me great performance - better than passing all cores!
-Last but not least, make sure to set the CPU governors to performance:
-`for i in /sys/devices/system/cpu/cpufreq/policy*/scaling_governor; do echo performance | sudo tee $i; done`
-this last step is optional
-
-# Anti Cheat Compatibility 
-this involves editing the xml code that makes up the VM settings
-in VRChat's Case 
-you need to add 
-`<smbios mode='host'/>` to `<os></os>`
-you need to add this
-```
-<kvm> 
-  <hidden state='on'/> 
-</kvm>
-```
-then under 
-  ```
-<cpu mode="host-passthrough" check="none" migratable="on">
-    <topology sockets="1" dies="1" cores="6" threads="2"/>
-```
-you add `<feature policy='disable' name='hypervisor'/>` 
-you can try and enable HyperV in the VM but I'm not sure that will do anything but its worth a try
-
-# Installing Looking Glass
-Looking Glass is a powerful tool that allows Windows and Linux applications to live side by side, but requires a little extra configuration. (1920x1080) display. if you wanna use it on an ultrawide (2560x1080) display. you need to change the shared memory buffer to 64MB
-```
-size unit='M'>64</size>
-```
-just add this code before the line `</devices>`
-```
-    <shmem name="looking-glass">
-      <model type="ivshmem-plain"/>
-      <size unit="M">64</size>
-    </shmem>
-```
-then on Linux using an AUR helper install `looking-glass` and `looking-glass-module-dkms`
-I will provide a script for running looking glass in the git repo you can use it as a bash alias
-
-# Finishing Windows setup
-you need to install the drivers for the GPU you passed to the VM
-then install the looking glass host program the Windows installer for the guest is [here](https://looking-glass.io/downloads). installing looking glass on the Windows guest will install the IVSHMEM Drivers needed for looking glass to work
-after which you should be good to play games with looking glass
+1. **Install GPU Drivers**
+2. **Install Looking Glass Host Program**
