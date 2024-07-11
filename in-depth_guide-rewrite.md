@@ -196,7 +196,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```xml
      <smbios mode='host'/>
      ```
-   - Add to just under <features>
+   - Add to `<features>`
      ```xml
      <vpindex state="on"/>
      <runtime state="on"/>
@@ -204,7 +204,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      <reset state="on"/>
      ```
 
-   - Add to just under <features>
+   - Add to just under `<features>`
      ```xml
       <kvm> 
        <hidden state='on'/> 
