@@ -196,10 +196,26 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
      ```xml
      <smbios mode='host'/>
      ```
+   - Add to just under <features>
+     ```xml
+     <vpindex state="on"/>
+     <runtime state="on"/>
+     <stimer state="on"/>
+     <reset state="on"/>
+     ```
+
+   - Add to just under <features>
+     ```xml
+      <kvm> 
+       <hidden state='on'/> 
+      </kvm>
+     ```
    - Add to `<cpu>`:
      ```xml
      <feature policy='disable' name='hypervisor'/>
      ```
+3. you need enable Hyper-V in Windows to hide the Linux Hypervisor
+   this tells any anti cheat software that its running under Microsoft Hv or Hyper V and will basically trick any anti cheat software into thinking its running on Microsoft's solution 
 
 ### Installing Looking Glass
 
