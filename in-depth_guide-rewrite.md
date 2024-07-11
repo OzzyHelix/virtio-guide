@@ -11,6 +11,7 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
 1. **Download Configs**
    - Get the configs from [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
    - copy them to the directories that the configs folder mimicks
+   - you'll need to edit those configs to fit your system check to make sure they work for you
 
 2. **Dracut Configuration**
    if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
