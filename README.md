@@ -8,7 +8,7 @@ VFIO allows people to run Windows for apps that simply can't run in Linux. Its a
 The draw back its not the best solution for apps that use anti-cheat software to protect multiplayer experiences.
 
 # In-Depth Guide
-if you want a more in-depth guide on how to do all this I have it [here](https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/in-depth.md).
+if you want a more in-depth guide on how to do all this I have it [here](https://github.com/OzzyHelix/virtio-guide/blob/main/in-depth.md).
 
 # Note
 this contains UUIDs for my VMs its meant to be private so I can't lose Windows keys to people copying my VMs
