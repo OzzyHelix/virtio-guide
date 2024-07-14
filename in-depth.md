@@ -89,7 +89,7 @@ Follow these steps to set up a VM.
      if the output is less than one you need to enable vmx or svm in your BIOS/UEFI firmware
      
 2. **Install Required Packages**
-   this is stuff needed for running VMs in general so we will install this
+   this is stuff needed for running VMs in general so we will install this, With Manjaro Linux, the commands are sometimes weird so you may need to use pamac in place of pacman, so keep that in mind.
    - Command:
      ```bash
      sudo pacman -Sy qemu-full virt-manager virt-viewer dnsmasq bridge-utils libguestfs ebtables vde2 openbsd-netcat
