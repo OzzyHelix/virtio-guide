@@ -4,7 +4,10 @@
 ## Config Files and Guide
 
 ### Starting Point
-This guide is tailored for Arch Linux and similar Arch-based distributions. Follow these steps to set up a VM.
+This guide is tailored for Arch Linux and similar Arch-based distributions. 
+With the Arch Based distro that it has been testing on are as follow, EndeavourOS, Garuda, and Manjaro Linux.
+
+Follow these steps to set up a VM.
 
 ### Installing, Copying Configs, and Getting a Patched Kernel
 
