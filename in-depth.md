@@ -13,12 +13,20 @@ This guide is tailored for Arch Linux and similar Arch-based distributions. Foll
    - copy them to the directories that the configs folder mimicks
    - you'll need to edit those configs to fit your system check to make sure they work for you
 
-2. **Dracut Configuration**
+2. **Dracut and Mkinitcpio Configuration**
+   2a. **Dracut Configuration**
    if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
    - Copy the config files to `/etc/dracut.conf.d` and run:
      ```bash
      sudo dracut-rebuild
      ```
+   2b. **Mkinitcpio Configuration**
+   if you are using mkinitcpio the config file for it you can get them here [GitHub](https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/configs/etc/mkinitcpio.conf).
+   - Copy the config file to `/etc/mkinitcpio.conf` and run:
+     ```bash
+     sudo mkinitcpio -P to update all kernels to accept the configurations 
+     ```
+
 
 4. **Patched Kernel**
    - Here are your options:
