@@ -27,7 +27,7 @@ Follow these steps to set up a system and a VM.
    if you are using mkinitcpio the config file for it you can get them here [GitHub](https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/configs/etc/mkinitcpio.conf).
    - Copy the config file to `/etc/mkinitcpio.conf` and run:
      ```bash
-     sudo mkinitcpio -P to update all kernels to accept the configurations 
+     sudo mkinitcpio -P # to update all kernels to accept the configurations 
      ```
 
 
