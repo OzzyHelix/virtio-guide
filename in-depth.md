@@ -18,7 +18,7 @@ Follow these steps to set up a system and a VM.
 
 2. **Grub, Dracut and Mkinitcpio Configuration**
    2a. **Grub Configuration**
-   if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs/default/).
+   if you are using dracut there are config files for it you can get them here [GitHub](https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/configs/etc/default/grub).
    - Copy the config files to `/etc/default/grub` and run:
      ```bash
      sudo grub-mkconfig -o /boot/grub/grub.cfg
