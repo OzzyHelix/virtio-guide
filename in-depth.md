@@ -274,8 +274,9 @@ this will let us access our VM from our Linux desktop
      yay -Sy looking-glass looking-glass-module-dkms
      ```
 
-3. **Install Looking Glass on Windows**
+3. **Install Looking Glass on Windows** 
    - Download and install from [Looking Glass](https://looking-glass.io/downloads).
+   - Make sure your looking glass version do match if the host computer if the host computer is running b7 then the vm should be running b7, just always make sure both version are the same.
 
 ### Finishing Windows Setup
 
