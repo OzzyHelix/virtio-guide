@@ -16,14 +16,20 @@ Follow these steps to set up a system and a VM.
    - copy them to the directories that the configs folder mimicks
    - you'll need to edit those configs to fit your system check to make sure they work for you
 
-2. **Dracut and Mkinitcpio Configuration**
-   2a. **Dracut Configuration**
+2. **Grub, Dracut and Mkinitcpio Configuration**
+   2a. **Grub Configuration**
+   if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs/default/).
+   - Copy the config files to `/etc/default/grub` and run:
+     ```bash
+     sudo grub-mkconfig -o /boot/grub/grub.cfg
+     ```
+   2b. **Dracut Configuration**
    if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs).
    - Copy the config files to `/etc/dracut.conf.d` and run:
      ```bash
      sudo dracut-rebuild
      ```
-   2b. **Mkinitcpio Configuration**
+   2c. **Mkinitcpio Configuration**
    if you are using mkinitcpio the config file for it you can get them here [GitHub](https://raw.githubusercontent.com/OzzyHelix/virtio-guide/main/configs/etc/mkinitcpio.conf).
    - Copy the config file to `/etc/mkinitcpio.conf` and run:
      ```bash
