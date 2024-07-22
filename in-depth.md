@@ -17,6 +17,7 @@ Follow these steps to set up a system and a VM.
    - you'll need to edit those configs to fit your system check to make sure they work for you
 
 2. **Grub, Dracut and Mkinitcpio Configuration**
+
    2a. **Grub Configuration**
    if you are using dracut there are config files for it you can get them here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs/default/).
    - Copy the config files to `/etc/default/grub` and run:
