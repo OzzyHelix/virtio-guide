@@ -287,8 +287,12 @@ this will let us access our VM from our Linux desktop
 ### Additional Extra Step
 increasing the vm.max_map_count value to 2147483642 will make proton and wine apps run better
 this video explains it better than I ever could but I will go into depth on how to change that value on Arch Linux
+
 https://youtu.be/r2aUS-E-cKI
-you can run `sudo sysctl -w vm.max_map_count=2147483642` to set the value for your current session but to save it perssiently you'll need to
-1. edit with your favor editor `/usr/lib/sysctl.d/10-arch.conf` and change the line vm.max_map_count= to have *2147483642* after the equals sign
-2. after making that change save the file and you can run `sudo sysctl -p to update the file to edit will most likely be sysctl.conf in `/etc/sysctl.conf` on other distros but Arch is different
+
+1. you can run `sudo sysctl -w vm.max_map_count=2147483642` to set the value for your current session but to save it perssiently 
+
+2. edit with your favor editor `/usr/lib/sysctl.d/10-arch.conf` and change the line vm.max_map_count= to have *2147483642* after the equals sign
+
+3. after making that change save the file and you can run `sudo sysctl -p` to update the file to edit will most likely be sysctl.conf in `/etc/sysctl.conf` on other distros but Arch is different
 once the vm.max_map_count value is increased you will find that wine and proton apps may run better
