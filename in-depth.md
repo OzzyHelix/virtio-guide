@@ -294,5 +294,7 @@ https://youtu.be/r2aUS-E-cKI
 
 2. edit with your favor editor `/usr/lib/sysctl.d/10-arch.conf` and change the line vm.max_map_count= to have *2147483642* after the equals sign
 
-3. after making that change save the file and you can run `sudo sysctl -p` to update the file to edit will most likely be sysctl.conf in `/etc/sysctl.conf` on other distros but Arch is different
+3. after making that change save the file and you can run `sudo sysctl -p` to update the file to edit will most likely be sysctl.conf
+
+    in `/etc/sysctl.conf` on other distros but Arch is different
 once the vm.max_map_count value is increased you will find that wine and proton apps may run better
