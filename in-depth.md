@@ -292,7 +292,7 @@ https://youtu.be/r2aUS-E-cKI
 
 1. you can run `sudo sysctl -w vm.max_map_count=2147483642` to set the value for your current session but to save it perssiently 
 
-2. edit with your favor editor `/usr/lib/sysctl.d/10-arch.conf` and change the line vm.max_map_count= to have *2147483642* after the equals sign
+2. edit with your favor editor `/usr/lib/sysctl.d/10-arch.conf` and change the line `vm.max_map_count=` to have *2147483642* after the equals sign
 
 3. after making that change save the file and you can run `sudo sysctl -p` to update the file to edit will most likely be sysctl.conf
 
