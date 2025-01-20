@@ -1,4 +1,4 @@
-# Ozzy's Guide to KVM/QEMU
+# Guide to KVM/QEMU
 #### Config files and Guide
 
 ![Image of VFIO Setup](vfio.png)
