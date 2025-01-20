@@ -148,7 +148,24 @@ Follow these steps to set up a system and a VM.
    - Restart libvirt:
      ```bash
      sudo systemctl restart libvirtd.service
-     ```
+**Additional you can run this command**
+   If you are using the XML files available here on [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/VM-xml), you will need to run this command.
+     - Command:
+       ```bash
+       sudo cp /usr/share/edk2-ovmf/x64/OVMF_VARS.4m.fd /var/lib/libvirt/qemu/nvram/win-gvr_VARS.fd
+       ```
+   If you are attempting to share files between the VM and the main system, we have a file available here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs/etc/samba) you will need to run this command.
+      - Command:
+      a: ```bash
+         sudo pacman -Sy samba
+         ```
+      b: ```bash
+         sudo smbpasswd -a (username you want)
+         ```
+      c: ```bash
+         sudo systemctl enable smb && sudo systemctl start smb 
+         ```
+      (Note that when sharing files, you will need the default gateway IP on the VM to connect to the Samba share. It should be something like 192.168.100.1.)
 
 ### Creating the VM
 
