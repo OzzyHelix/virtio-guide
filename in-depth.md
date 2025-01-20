@@ -154,7 +154,7 @@ Follow these steps to set up a system and a VM.
        ```bash
        sudo cp /usr/share/edk2-ovmf/x64/OVMF_VARS.4m.fd /var/lib/libvirt/qemu/nvram/win-gvr_VARS.fd
        ```
-   If you are attempting to share files between the VM and the main system, we have a file available here [GitHub](https://github.com/OzzyHelix/virtio-guide/tree/main/configs/etc/samba) you will need to run this command.
+   If you are attempting to share files between the VM and the main system, we have a file available here [GitHub](https://github.com/kori-time/virtio-guide/tree/main/configs/etc/samba) you will need to run this command.
       - Command:
       a: ```bash
          sudo pacman -Sy samba
