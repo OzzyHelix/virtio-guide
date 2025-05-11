@@ -15,7 +15,7 @@ this contains UUIDs for my VMs its meant to be private so I can't lose Windows k
 
 ### System Specs
 * **Motherboard:** MSI MPG X670E CARBON WIFI
-* **CPU:** Ryzen 9 7900X3D "[12c/24t]" @ Stock
+* **CPU:** Ryzen 9 7900X3D [12c/24t] @ Stock
 * **RAM:** Corsair Vengeance RGB 64 GB (2 x 32 GB) DDR5-6000 CL30
 * **GPU1 (Host):** ASRock Challenger OC Radeon RX 7800 XT 16 GB @ Stock
 * **GPU2 (Guest):** MSI RTX 2070 Super 8GB @ Stock
