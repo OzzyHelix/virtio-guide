@@ -15,13 +15,13 @@ this contains UUIDs for my VMs its meant to be private so I can't lose Windows k
 
 ### System Specs
 * **Motherboard:** MSI MPG X670E CARBON WIFI
-* **CPU:** Ryzen 9 7900X3D @ Stock
+* **CPU:** Ryzen 9 7900X3D "[12c/24t]" @ Stock
 * **RAM:** Corsair Vengeance RGB 64 GB (2 x 32 GB) DDR5-6000 CL30
 * **GPU1 (Host):** ASRock Challenger OC Radeon RX 7800 XT 16 GB @ Stock
 * **GPU2 (Guest):** MSI RTX 2070 Super 8GB @ Stock
 * **Storage:** 1 x Western Digital Blue SN570 1 TB M.2-2280 PCIe 3.0 X4, 1 x Samsung 990 Pro 4 TB M.2-2280 PCIe 4.0 X4 NVME, Patriot P400 Lite 2TB NVME, 1 x 8TB Toshiba X300 HDD*
 * **OS (Guest):** Windows 11 Pro
-* **OS (Host):** Arch Linux running on the Linux Zen Kernel
+* **OS (Host):** Arch Linux running on the CachyOS Kernel
 
 *Host on the WD Blue drive and Guest drives are stored on an SSD and HDD with the other HDD serving as a backup drive.*
 
