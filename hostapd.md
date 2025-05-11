@@ -13,3 +13,5 @@ To run the hostapd service, you can do so in Cockpit or use the following comman
 it is also possible to run hostapd directly with `sudo hostapd /etc/hostapd/hostapd.conf`
 this can be helpful for debugging the hotspot if its not working
 ***USE THIS AT YOUR OWN RISK***
+
+it has been moved to the old folder

@@ -1,1 +1,1 @@
-the nvidia is for people using nvidia cards on Linux
+there is an nvidia config that is current in the old folder

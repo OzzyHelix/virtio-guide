@@ -3,3 +3,5 @@ you may have to run gdisk /dev/whateverdisk to delete all partions on that drive
 then run cgdisk /dev/whateverdisk to make the partions, 
 then mkfs.fat -F32 /dev/whateverdisk and 
 mkfs.ext4 /dev/whateverdisk cause it sometimes just like to fails in weird ways.
+
+you must have the drives wiped before letting archinstall format it. otherwise it will fail. it is best to make backups of the your data with something like pika backup so you can restore your home directory and other important directories
