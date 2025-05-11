@@ -14,12 +14,12 @@ if you want a more in-depth guide on how to do all this I have it [here](https:/
 this contains UUIDs for my VMs its meant to be private so I can't lose Windows keys to people copying my VMs
 
 ### System Specs
-* **Motherboard:** MPG X670E CARBON WIFI
+* **Motherboard:** MSI MPG X670E CARBON WIFI
 * **CPU:** Ryzen 9 7900X3D @ Stock
 * **RAM:** Corsair Vengeance RGB 64 GB (2 x 32 GB) DDR5-6000 CL30
 * **GPU1 (Host):** ASRock Challenger OC Radeon RX 7800 XT 16 GB @ Stock
-* **GPU2 (Guest):** Zotac RTX 3060 12GB @ Stock
-* **Storage:** 1 x Western Digital Blue SN570 1 TB M.2-2280 PCIe 3.0 X4, 1 x Samsung 990 Pro 4 TB M.2-2280 PCIe 4.0 X4 NVME, 1 x 3TB Toshiba P300 HDD*
+* **GPU2 (Guest):** MSI RTX 2070 Super 8GB @ Stock
+* **Storage:** 1 x Western Digital Blue SN570 1 TB M.2-2280 PCIe 3.0 X4, 1 x Samsung 990 Pro 4 TB M.2-2280 PCIe 4.0 X4 NVME, Patriot P400 Lite 2TB NVME, 1 x 8TB Toshiba X300 HDD*
 * **OS (Guest):** Windows 11 Pro
 * **OS (Host):** Arch Linux running on the Linux Zen Kernel
 
@@ -27,7 +27,7 @@ this contains UUIDs for my VMs its meant to be private so I can't lose Windows k
 
 * here is a hardware probe to give you a better idea of my system
 
-   https://linux-hardware.org/?probe=24b608f168
+   https://linux-hardware.org/?probe=7b57b31209
 
 ### Troubleshooting
 ### Zen Kernel and ACS Patch
@@ -35,14 +35,16 @@ I recommend the Linux Zen Kernel because it includes the ACS Patch as a kernel l
 #### Motherboard
 The MPG X670E CARBON WIFI serves as a good option for VFIO,  It's GPU/USB card IOMMU groups are as follows (all groups in the iommu file):
 ```
-IOMMU Group 39:
-        10:00.0 Network controller [0280]: MEDIATEK Corp. MT7922 802.11ax PCI Express Wireless Network Adapter [14c3:0616]
-IOMMU Group 41:
-        14:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
-IOMMU Group 19:
-        05:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA106 [GeForce RTX 3060 Lite Hash Rate] [10de:2504] (rev a1)
 IOMMU Group 20:
-        05:00.1 Audio device [0403]: NVIDIA Corporation GA106 High Definition Audio Controller [10de:228e] (rev a1)
+        05:00.0 VGA compatible controller [0300]: NVIDIA Corporation TU104 [GeForce RTX 2070 SUPER] [10de:1e84] (rev a1)
+IOMMU Group 21:
+        05:00.1 Audio device [0403]: NVIDIA Corporation TU104 HD Audio Controller [10de:10f8] (rev a1)
+IOMMU Group 22:
+        05:00.2 USB controller [0c03]: NVIDIA Corporation TU104 USB 3.1 Host Controller [10de:1ad8] (rev a1)
+IOMMU Group 23:
+        05:00.3 Serial bus controller [0c80]: NVIDIA Corporation TU104 USB Type-C UCSI Controller [10de:1ad9] (rev a1)
+IOMMU Group 45:
+        14:00.0 USB controller [0c03]: Renesas Electronics Corp. uPD720201 USB 3.0 Host Controller [1912:0014] (rev 03)
 
 ```
 The RTX 3060 is fully isolated and works with the VM and the RX 7800 XT is not
