@@ -1,0 +1,19 @@
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh pool-edit ISOs
+or other application using the libvirt API.
+-->
+
+<pool type='dir'>
+  <name>ISOs</name>
+  <uuid>37fc4092-90c5-4ae6-8e58-2a954633024b</uuid>
+  <capacity unit='bytes'>0</capacity>
+  <allocation unit='bytes'>0</allocation>
+  <available unit='bytes'>0</available>
+  <source>
+  </source>
+  <target>
+    <path>/home/ozzy/Documents/OS-ImageFiles/ISOs</path>
+  </target>
+</pool>

@@ -1,0 +1,19 @@
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh pool-edit m3vdisk
+or other application using the libvirt API.
+-->
+
+<pool type='dir'>
+  <name>m3vdisk</name>
+  <uuid>926ee4f9-c2d5-4532-997b-7a8c917bba99</uuid>
+  <capacity unit='bytes'>0</capacity>
+  <allocation unit='bytes'>0</allocation>
+  <available unit='bytes'>0</available>
+  <source>
+  </source>
+  <target>
+    <path>/volumes/m3vdisk</path>
+  </target>
+</pool>

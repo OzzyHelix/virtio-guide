@@ -1,0 +1,7 @@
+<filter name='qemu-announce-self' chain='root'>
+  <!-- This rule originally allowed protocol '0x835' which qemu originally used.
+    As this bug in qemu was fixed and libvirt no longer supports such old qemu
+    versions this now is just a shim refering to 'qemu-announce-self-rarp' to
+    preserve compatibility if someone used this rule directly -->
+    <filterref filter='qemu-announce-self-rarp'/>
+</filter>
