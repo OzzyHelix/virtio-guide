@@ -93,16 +93,19 @@ Follow these steps to set up your new, secure system.
      # Find UUID of the encrypted partition (e.g., /dev/sda2)
      # blkid -s UUID -o value /dev/sda2
      ```
-     - For Dracut, modify the kernel command line in your **Grub configuration** (next step).
+     - For Dracut, modify the kernel command line in your **Bootloader configuration** (next step).
      - For Mkinitcpio, rebuild the images: `mkinitcpio -P`
 
-5. **Bootloader (GRUB) Configuration**
+5. **Bootloader Configuration**
+   You have two popular options for the bootloader: **GRUB** or **systemd-boot**. Both require the same kernel parameters to unlock the full disk encryption. You can get the UUID of your encrypted partition (e.g., `/dev/sda2`) using: `blkid -s UUID -o value /dev/sda2`.
+
+   #### Alternative A: GRUB (Standard and Flexible)
    - Install GRUB:
      ```bash
      pacman -S grub efibootmgr
      grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Arch
      ```
-   - Edit `/etc/default/grub` to pass the LUKS parameters to the kernel. Replace `<UUID>` with the UUID from the step above.
+   - Edit `/etc/default/grub` to pass the LUKS parameters to the kernel. Replace `<UUID>` with the UUID of your encrypted partition.
      ```bash
      GRUB_CMDLINE_LINUX="... cryptdevice=UUID=<UUID>:cryptroot root=/dev/mapper/cryptroot"
      ```
@@ -110,6 +113,26 @@ Follow these steps to set up your new, secure system.
      ```bash
      grub-mkconfig -o /boot/grub/grub.cfg
      ```
+
+   #### Alternative B: systemd-boot (Simple and Modern)
+   This option is only available for **UEFI** systems. Ensure your EFI partition is mounted at `/boot/efi`.
+   - Install systemd-boot:
+     ```bash
+     pacman -S systemd
+     bootctl install
+     ```
+   - Create a bootloader entry file at `/boot/loader/entries/arch.conf`:
+     ```bash
+     sudo nano /boot/loader/entries/arch.conf
+     ```
+   - Add the following content, making sure to replace `<UUID>` with the UUID of your encrypted partition.
+     ```ini
+     title   Arch Linux
+     linux   /vmlinuz-linux
+     initrd  /initramfs-linux.img
+     options cryptdevice=UUID=<UUID>:cryptroot root=/dev/mapper/cryptroot rw
+     ```
+   - You can also optionally edit the file `/boot/loader/loader.conf` to set a default entry or timeout.
 
 ---
 
@@ -154,40 +177,28 @@ Follow these steps to set up your new, secure system.
 
 ### Backing Up and Restoring AUR Packages
 
-This section assumes you have installed an AUR helper like **`paru`** or **`yay`**. You will install it later from the AUR or Chaotic-AUR after setting up your user and exiting chroot.
-
 1. **Install an AUR Helper**
-   - If not already installed:
+   - After rebooting and logging in as your user, install an AUR helper like `paru` (available in Chaotic-AUR):
      ```bash
-     # Example for paru from Chaotic-AUR
      sudo pacman -S paru
      ```
 
 2. **Backing Up Package Lists**
-   To backup **all** explicitly installed packages (both official and AUR):
+   To backup **only** packages that originated from the AUR (or Chaotic-AUR) by filtering packages not in the official repositories:
    - Command:
      ```bash
-     pacman -Qqe > ~/package_list_full.txt
-     ```
-   To backup **only** packages that originated from the AUR (or Chaotic-AUR) by filtering:
-   - Command:
-     ```bash
-     # This lists packages *not* in official repositories
      pacman -Qm > ~/package_list_aur_only.txt
      ```
    - **Backup the `package_list_aur_only.txt` file** to external storage.
 
 3. **Restoring Packages with Chaotic-AUR Integration**
-   When restoring on a new system where **Chaotic-AUR** is already configured in `/etc/pacman.conf` and you have an AUR helper (`paru` in this example), the helper will first check Chaotic-AUR for a pre-built binary.
+   When restoring on a new system where **Chaotic-AUR** is already configured, the AUR helper will first check it for a pre-built binary.
    - Command:
      ```bash
      # Restore only the AUR packages from the list
      paru -S --needed - < ~/package_list_aur_only.txt
      ```
-   - **How it works:** `paru` reads the package names (`- < ...`) and attempts to install them (`-S`). For each package:
-     1. It checks the official repos.
-     2. It checks the pre-built **Chaotic-AUR** repo (if available, installation is nearly instant).
-     3. If not found in any repo, it falls back to building it from the standard AUR source.
+   - The command uses `paru` to install packages (`-S`) from the list (`- < ...`) and only installs them if they are not already installed (`--needed`).
 
 4. **Final Steps**
    - Exit chroot: `exit`
@@ -196,4 +207,4 @@ This section assumes you have installed an AUR helper like **`paru`** or **`yay`
      sudo umount -R /mnt
      sudo reboot
      ```
-   Your system should now boot into the GRUB menu, prompt for your FDE password, and then load the KDE Plasma 6 login screen.
+   Your system should now boot, prompt for your FDE password, and then load the KDE Plasma 6 login screen.
