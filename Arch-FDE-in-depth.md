@@ -152,7 +152,8 @@ nano /mnt/etc/fstab
 Here will will be using UUIDs to set the `/etc/crypttab`
 ```bash
 # repeat this with the actual partition names of your encrypted partitions /dev/sda2 /dev/sda3 etc it will add it to cryptab
-echo "UUID=$(blkid -s PARTUUID -o value /dev/nvme0n1p1) none  luks,discard,no-read-workqueue,no-write-workqueue" >> /etc/crypttab
+# you will also start the echo command with what you want to name the /dev/mapper device as shown below
+echo "cryptroot UUID=$(blkid -s PARTUUID -o value /dev/nvme0n1p1) none  luks,discard,no-read-workqueue,no-write-workqueue" >> /etc/crypttab
 # you can review cryptab with this command
 cat /etc/crypttab
 ```
