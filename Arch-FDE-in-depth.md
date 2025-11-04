@@ -196,13 +196,7 @@ pacman -Sy
      ```bash
      pacman -S dracut cryptsetup
      ```
-   - Edit the Dracut configuration (`/etc/dracut.conf.d/luks.conf`) or Mkinitcpio (`/etc/mkinitcpio.conf`) to ensure `encrypt` and `luks` hooks are included **before** the `filesystems` hook.
-   - **Crucially**, configure the kernel image to recognize the encrypted volume using its UUID.
-     ```bash
-     # Find UUID of the encrypted partition (e.g., /dev/sda2)
-     # blkid -s UUID -o value /dev/sda2
-     ```
-     - For Dracut, modify the kernel command line in your **Bootloader configuration** (next step).
+   - Edit the Mkinitcpio configuration (`/etc/mkinitcpio.conf`) to ensure `encrypt` are included **before** the `filesystems` hook.
      - For Mkinitcpio, rebuild the images: `mkinitcpio -P`
 
 ### User Setup
