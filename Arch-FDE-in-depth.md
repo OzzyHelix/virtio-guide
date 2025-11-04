@@ -293,7 +293,7 @@ sudo pacman -S xf86-input-synaptics
 sudo pacman -S mesa
 ```
 
-### KDE Plasma
+### KDE Plasma, the AUR helper and the Web Browser
 ```bash
 sudo pacman -S plasma sddm konsole git go wget
 sudo systemctl enable sddm.service
