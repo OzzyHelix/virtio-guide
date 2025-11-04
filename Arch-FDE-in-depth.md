@@ -269,7 +269,7 @@ Update modules:
 ```bash
 sudo nano /etc/mkinitcpio.conf
 # MODULES="nvidia nvidia_modeset nvidia_uvm nvidia_drm"
-save the file then run `mkinitcpio -P` to compile for all kernels
+# save the file then run `mkinitcpio -P` to compile for all kernels
 ```
 
 Add kernel parameter:
