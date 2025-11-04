@@ -375,6 +375,8 @@ export MAKEFLAGS="-j17 -l16"
 
 References:
 - [Arch Wiki](https://wiki.archlinux.org)
+- [Gloriuous eggroll's Blog](https://www.gloriouseggroll.tv/arch-linux-efi-install-guide/)
 - [Tom’s Hardware Guide](http://www.tomshardware.com/faq/id-1860905/install-arch-linux-uefi.html)
 - [LinuxVeda](http://www.linuxveda.com/2014/06/07/arch-linux-tutorial/)
 - [ServerFault Discussion](http://serverfault.com/questions/5841/how-much-swap-space-on-a-high-memory-system)
+
