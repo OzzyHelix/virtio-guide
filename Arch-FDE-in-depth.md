@@ -1,88 +1,196 @@
-# Ozzy's In-Depth Guide to Arch Linux with PQ-FDE and KDE Plasma 6
+# Arch Linux Installation Guide
 
-## Config Files and Guide
+## PART 1: Preparation and Disk Partitioning
 
-### Starting Point
-This guide is a complete system installation guide, tailored for Arch Linux and similar Arch-based distributions. It includes full disk encryption (FDE) with a focus on strong, future-proof ciphers, and the installation of the **KDE Plasma 6** desktop environment. It also covers advanced package management with **Chaotic-AUR**.
+### Preparation
 
-Follow these steps to set up your new, secure system.
+#### Items Necessary
+1. A 4GB or higher USB stick
 
-### Installation Prep and Post-Quantum Full Disk Encryption (PQ-FDE)
+#### Downloads Necessary
+2. Arch Linux ISO image  
+   [https://www.archlinux.org/download/](https://www.archlinux.org/download/)
 
-1. **Boot and Connect**
-   - Boot from the Arch Linux installation ISO.
-   - Connect to the internet. For wireless, use `iwctl`. For wired, `dhcpcd` should start automatically.
-     ```bash
-     ping archlinux.org # Test connection
-     timedatectl set-ntp true # Ensure clock is accurate
-     ```
+##### Creating a Bootable USB on Windows
+3. Rufus
 
-2. **Partitioning Scheme**
-   - Identify your disk (e.g., `/dev/sda`).
-   - Command:
-     ```bash
-     fdisk /dev/sda
-     # Create a small EFI partition (e.g., 550M) with type 'EFI System'
-     # Create the main Linux partition (the rest of the disk) with type 'Linux filesystem'
-     ```
+##### Creating a Bootable USB on Linux
+3a.
+```bash
+sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdX status=progress && sync
+```
+*(Replace `sdX` with your USB stick. Find it using `lsblk`.)*
 
-3. **Post-Quantum Full Disk Encryption (FDE)**
-   We will use **LUKS2** with strong parameters. While true quantum-safe algorithms like Dilithium are currently experimental for FDE, we use a robust, future-proof cipher configuration as a secure starting point.
-   - Command:
-     ```bash
-     # Format the main partition (e.g., /dev/sda2)
+#### Enabling EFI Mode via BIOS
+Check your motherboard manual to enable EFI/UEFI mode in BIOS.
+
+#### Booting from USB in EFI Mode
+Insert your Arch USB stick, reboot, and either:
+- Set the USB stick as the first boot device in BIOS, or
+- Use the hotkey (e.g. `F11`, `DEL`) to select the USB stick.
+
+Select **“Arch Linux archiso x86_64 UEFI USB”** when booting.  
+You’ll arrive at:
+```
+root@archiso ~ #
+```
+
+#### Verifying Internet Connectivity
+Test your internet connection:
+```bash
+ping -c 4 www.google.com
+```
+If you get a response, you’re online.
+
+#### Verifying EFI Mode
+```bash
+efivar -l
+```
+If you get a list of variables, EFI mode is active.
+
+---
+
+### Disk Partitioning
+
+#### Finding Available Drives
+```bash
+lsblk
+```
+Example output:
+```
+sda 238.5GB – SSD
+sdb 931.5GB – HDD
+sdc – USB stick
+```
+
+#### Wiping the Existing Partition Table
+⚠️ **This erases the entire drive!**
+```bash
+gdisk /dev/sdX
+x   (expert mode)
+z  (clears partition table)
+y  (confirm)
+y  (confirm)
+```
+
+#### Creating Boot Partition (EF00)
+```bash
+cgdisk /dev/sdX
+```
+Create a **2GiB EFI boot partition**:
+```
+Size: 2048MiB
+Hex Code: EF00
+Name: boot
+```
+#### Creating Root and Home
+- **Root** = `/` (like C:\ in Windows)
+- **Home** = `/home` (user data)
+
+If you keep `/home` inside root, use all space for root:
+```
+Name: root
+```
+
+If you want separate `/home`:
+```
+root: 120GiB
+home: whatever you want it to be
+```
+
+#### Writing Partition Table
+Select **[Write] → yes → [Quit]**, then reboot.
+
+#### Setting File Systems with Full Disk Encryption
+We will use **LUKS2** with strong parameters. While true quantum-safe algorithms like Dilithium are currently experimental for FDE, we use a robust, future-proof cipher configuration as a secure starting point.
+```bash
+mkfs.fat -F32 /dev/sda1
+     # Format the root partition (e.g., /dev/sda2)
      sudo cryptsetup luksFormat --type luks2 -c aes-xts-plain64 -s 512 -h sha512 /dev/sda2
      # Open the encrypted volume, naming it 'cryptroot'
      sudo cryptsetup open /dev/sda2 cryptroot
-     ```
+     mkfs.ext4 /dev/mapper/cryptroot # you can replace ext4 with btrfs or whatever filesystem you want
+     # repeat this for each drive or partition you want encrypted and take note of cryptroot there your device will be mounted at /dev/mapper/<whatever you named cryptroot or other partitions in the sudo cryptsetup open cmd here is an example
+```
 
-4. **Formatting and Mounting**
-   - Format the opened volume:
-     ```bash
-     sudo mkfs.ext4 /dev/mapper/cryptroot
-     ```
-   - Format the EFI partition (e.g., `/dev/sda1`):
-     ```bash
-     sudo mkfs.fat -F 32 /dev/sda1
-     ```
-   - Mount the root filesystem:
-     ```bash
-     sudo mount /dev/mapper/cryptroot /mnt
-     # Create and mount the EFI directory
-     sudo mkdir -p /mnt/boot/efi
-     sudo mount /dev/sda1 /mnt/boot/efi
-     ```
+---
 
-### Base Installation and Configuration
+## PART 2: Installing Arch and Making It Boot
 
-1. **Install Base Packages**
-   - Command:
-     ```bash
-     sudo pacstrap /mnt base linux linux-firmware nano man-db man-pages
-     ```
+### Mounting Partitions
+```bash
+mount /dev/sda1 /mnt/boot
+# say you have already formatted the /dev/mapper device you just mount it on the mount point you want
+ mkdir /boot
+ mount /dev/mapper/cryptroot /mnt
+ mkdir /mnt/home
+mount /dev/sda1 /mnt/boot
+mount /dev/mapper/crypthome /mnt/home
+```
 
-2. **Fstab and Chroot**
-   - Generate the file system table:
-     ```bash
-     sudo genfstab -U /mnt >> /mnt/etc/fstab
-     ```
-   - Change root into the new system:
-     ```bash
-     arch-chroot /mnt
-     ```
+### Mirrorlist Setup
+```bash
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+sudo pacman -S pacman-contrib
+sed -i 's/^#Server/Server/' /etc/pacman.d/mirrorlist.backup
+rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
+```
 
-3. **System Configuration**
-   - Set the timezone: `ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`
-   - Run `hwclock --systohc`
-   - Set locale: Uncomment `en_US.UTF-8 UTF-8` in `/etc/locale.gen` and run:
-     ```bash
-     locale-gen
-     echo LANG=en_US.UTF-8 > /etc/locale.conf
-     ```
-   - Set hostname: `echo myhostname > /etc/hostname`
-   - Set root password: `passwd`
+### Install Base System
+we will be using the zen kernel because it works with acs patch without patching the kernel
+```bash
+pacstrap -i /mnt base base-devel nano zsh linux-zen linux-zen-headers linux-firmware
+```
 
-4. **Dracut/Mkinitcpio Configuration for FDE**
+### Generate fstab
+```bash
+genfstab -U -p /mnt >> /mnt/etc/fstab
+nano /mnt/etc/fstab
+```
+
+### Setup /etc/crypttab
+Here will will be using UUIDs to set the `/etc/crypttab`
+```bash
+# repeat this with the actual partition names of your encrypted partitions /dev/sda2 /dev/sda3 etc it will add it to cryptab
+echo "UUID=$(blkid -s PARTUUID -o value /dev/nvme0n1p1) none  luks,discard,no-read-workqueue,no-write-workqueue" >> /etc/crypttab
+# you can review cryptab with this command
+cat /etc/crypttab
+```
+### Chroot into the System
+```bash
+arch-chroot /mnt
+```
+### Language
+```bash
+nano /etc/locale.gen
+locale-gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+export LANG=en_US.UTF-8
+```
+
+### Time
+```bash
+ln -s /usr/share/zoneinfo/America/New_York > /etc/localtime
+hwclock --systohc --utc
+```
+
+### Hostname
+```bash
+echo yourhostname > /etc/hostname
+# go ahead and enable trim
+systemctl enable fstrim.timer
+```
+
+### Enable Multilib
+```bash
+nano /etc/pacman.conf
+# Uncomment:
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+
+pacman -Sy
+```
+### Dracut/Mkinitcpio Configuration for FDE
    - Install required packages for kernel image generation:
      ```bash
      pacman -S dracut cryptsetup
@@ -96,59 +204,140 @@ Follow these steps to set up your new, secure system.
      - For Dracut, modify the kernel command line in your **Bootloader configuration** (next step).
      - For Mkinitcpio, rebuild the images: `mkinitcpio -P`
 
-5. **Bootloader Configuration**
-   You have two popular options for the bootloader: **GRUB** or **systemd-boot**. Both require the same kernel parameters to unlock the full disk encryption. You can get the UUID of your encrypted partition (e.g., `/dev/sda2`) using: `blkid -s UUID -o value /dev/sda2`.
+### User Setup
+```bash
+passwd
+useradd -m -g users -G wheel,video,audio,storage -s /bin/bash yourusername
+passwd yourusername
+```
 
-   #### Alternative A: GRUB (Standard and Flexible)
-   - Install GRUB:
-     ```bash
-     pacman -S grub efibootmgr
-     grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=Arch
-     ```
-   - Edit `/etc/default/grub` to pass the LUKS parameters to the kernel. Replace `<UUID>` with the UUID of your encrypted partition.
-     ```bash
-     GRUB_CMDLINE_LINUX="... cryptdevice=UUID=<UUID>:cryptroot root=/dev/mapper/cryptroot"
-     ```
-   - Generate the final GRUB configuration:
-     ```bash
-     grub-mkconfig -o /boot/grub/grub.cfg
-     ```
+### Sudoers
+```bash
+EDITOR=nano visudo
+# Uncomment:
+%wheel ALL=(ALL) ALL
+```
 
-   #### Alternative B: systemd-boot (Simple and Modern)
-   This option is only available for **UEFI** systems. Ensure your EFI partition is mounted at `/boot/efi`.
-   - Install systemd-boot:
-     ```bash
-     pacman -S systemd
-     bootctl install
-     ```
-   - Create a bootloader entry file at `/boot/loader/entries/arch.conf`:
-     ```bash
-     sudo nano /boot/loader/entries/arch.conf
-     ```
-   - Add the following content, making sure to replace `<UUID>` with the UUID of your encrypted partition.
-     ```ini
-     title   Arch Linux
-     linux   /vmlinuz-linux
-     initrd  /initramfs-linux.img
-     options cryptdevice=UUID=<UUID>:cryptroot root=/dev/mapper/cryptroot rw
-     ```
-   - You can also optionally edit the file `/boot/loader/loader.conf` to set a default entry or timeout.
+### Bootloader
+```bash
+mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+bootctl install
+```
+
+Create config:
+```bash
+nano /boot/loader/entries/arch.conf
+```
+```
+title Arch Linux
+linux /vmlinuz-linux-zen
+initrd /initramfs-linux-zen.img
+```
+now we do 
+```bash
+# replace /dev/nvme0n1p1 with your root partition. you can find it with lsblk
+echo "options root=/dev/mapper/cryptroot cryptdevice=UUID=$(blkid -s PARTUUID -o value /dev/nvme0n1p1):cryptroot zswap.enabled=0 rw" nowatchdog
+# that will add the last part your boot loader entry
+````
+
+### Microcode
+```bash
+pacman -S intel-ucode # for Intel
+pacman -Sy amd-ucode # for AMD
+```
+Add to `/boot/loader/entries/arch.conf`:
+```
+initrd /intel-ucode.img
+initrd /initramfs-linux.img
+```
+
+### Network
+```bash
+sudo pacman -S NetworkManager
+sudo systemctl enable NetworkManager.service
+```
+
+### NVIDIA Drivers
+```bash
+sudo pacman -S linux-zen-headers
+sudo pacman -S nvidia-open-dkms hip-runtime-nvidia lib32-nvidia-utils lib32-opencl-nvidia libva-nvidia-driver nvidia-settings nvidia-utils opencl-nvidia
+```
+
+Update modules:
+```bash
+sudo nano /etc/mkinitcpio.conf
+# MODULES="nvidia nvidia_modeset nvidia_uvm nvidia_drm"
+```
+
+Add kernel parameter:
+```bash
+options root=PARTUUID=xxxx rw nvidia-drm.modeset=1
+```
+
+Add pacman hook:
+```bash
+sudo nano /etc/pacman.d/hooks/nvidia.hook
+```
+```
+[Trigger]
+Operation=Install
+Operation=Upgrade
+Operation=Remove
+Type=Package
+Target=nvidia-open-dkms
+
+[Action]
+Depends=mkinitcpio
+When=PostTransaction
+Exec=/usr/bin/mkinitcpio -P
+```
+
+Reboot:
+```bash
+exit
+umount -R /mnt
+reboot
+```
 
 ---
 
-### Installing KDE Plasma 6 and Chaotic-AUR
+## PART 3: Making It User-Friendly
 
-1. **Add User and Enable Services**
-   - Add a non-root user: `useradd -m -g users -G wheel,video,audio,storage -s /bin/bash your-username`
-   - Set password: `passwd your-username`
-   - Install networking services and a display manager:
-     ```bash
-     pacman -S networkmanager sudo
-     systemctl enable NetworkManager
-     ```
-   - Uncomment the `%wheel ALL=(ALL) ALL` line in `/etc/sudoers` (use `visudo`).
+### Touchpad Support
+```bash
+sudo pacman -S xf86-input-synaptics
+```
 
-2. **Configure Chaotic-AUR Repository**
+### 3D Support
+```bash
+sudo pacman -S mesa
+```
+
+### KDE Plasma
+```bash
+sudo pacman -S plasma sddm
+sudo systemctl enable sddm.service
+```
+
+### NVIDIA Screen Tearing Fix
+```bash
+sudo nvidia-settings
+```
+Enable **Force Composition Pipeline** and **Force Full Composition Pipeline**, then save.
+
+### AUR Helper (Yay)
+```bash
+wget https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz
+tar -xvzf yay.tar.gz
+cd yay
+makepkg -csi
+cd ..
+sudo rm -R yay
+```
+
+## Setting up the Chaotic-AUR for autobuilt aur software
+
+### Configure Chaotic-AUR Repository
    This repository provides pre-built AUR packages, saving compile time.
    - Command (as root/in chroot):
      ```bash
@@ -162,49 +351,30 @@ Follow these steps to set up your new, secure system.
      Include = /etc/pacman.d/chaotic-mirrorlist
      ```
 
-3. **Install KDE Plasma 6**
-   - Update your mirror list and sync repositories: `pacman -Sy`
-   - Install the KDE Plasma 6 group and Xorg/Mesa:
-     ```bash
-     pacman -S xorg plasma-meta sddm mesa
-     ```
-   - Enable the display manager:
-     ```bash
-     systemctl enable sddm
-     ```
+### Speed Up Compilation
+```bash
+sudo pacman -S ccache
+sudo nano /etc/makepkg.conf
+```
+Edit:
+```
+BUILDENV=(!distcc color ccache check !sign)
+MAKEFLAGS="-j17 -l16"
+```
+
+Add to `~/.bashrc`:
+```bash
+export PATH="/usr/lib/ccache/bin/:$PATH"
+export MAKEFLAGS="-j17 -l16"
+```
 
 ---
 
-### Backing Up and Restoring AUR Packages
+## Done!
+🎉 **Enjoy your new Arch Linux system!**
 
-1. **Install an AUR Helper**
-   - After rebooting and logging in as your user, install an AUR helper like `paru` (available in Chaotic-AUR):
-     ```bash
-     sudo pacman -S paru
-     ```
-
-2. **Backing Up Package Lists**
-   To backup **only** packages that originated from the AUR (or Chaotic-AUR) by filtering packages not in the official repositories:
-   - Command:
-     ```bash
-     pacman -Qm > ~/package_list_aur_only.txt
-     ```
-   - **Backup the `package_list_aur_only.txt` file** to external storage.
-
-3. **Restoring Packages with Chaotic-AUR Integration**
-   When restoring on a new system where **Chaotic-AUR** is already configured, the AUR helper will first check it for a pre-built binary.
-   - Command:
-     ```bash
-     # Restore only the AUR packages from the list
-     paru -S --needed - < ~/package_list_aur_only.txt
-     ```
-   - The command uses `paru` to install packages (`-S`) from the list (`- < ...`) and only installs them if they are not already installed (`--needed`).
-
-4. **Final Steps**
-   - Exit chroot: `exit`
-   - Unmount and reboot:
-     ```bash
-     sudo umount -R /mnt
-     sudo reboot
-     ```
-   Your system should now boot, prompt for your FDE password, and then load the KDE Plasma 6 login screen.
+References:
+- [Arch Wiki](https://wiki.archlinux.org)
+- [Tom’s Hardware Guide](http://www.tomshardware.com/faq/id-1860905/install-arch-linux-uefi.html)
+- [LinuxVeda](http://www.linuxveda.com/2014/06/07/arch-linux-tutorial/)
+- [ServerFault Discussion](http://serverfault.com/questions/5841/how-much-swap-space-on-a-high-memory-system)
