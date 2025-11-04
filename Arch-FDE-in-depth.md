@@ -105,8 +105,8 @@ Select **[Write] → yes → [Quit]**, then reboot.
 We will use **LUKS2** with strong parameters. While true quantum-safe algorithms like Dilithium are currently experimental for FDE, we use a robust, future-proof cipher configuration as a secure starting point.
 ```bash
 mkfs.fat -F32 /dev/sda1
-     # Format the root partition (e.g., /dev/sda2)
-     sudo cryptsetup luksFormat --type luks2 -c aes-xts-plain64 -s 512 -h sha512 /dev/sda2
+     # encrypt the root partition (e.g., /dev/sda2)
+     sudo cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 --hash sha256 --pbkdf argon2id --pbkdf-memory 1048576 --pbkdf-parallel 4 --pbkdf-force-iterations 4 /dev/sd2
      # Open the encrypted volume, naming it 'cryptroot'
      sudo cryptsetup open /dev/sda2 cryptroot
      mkfs.ext4 /dev/mapper/cryptroot # you can replace ext4 with btrfs or whatever filesystem you want
