@@ -295,7 +295,7 @@ sudo pacman -S mesa
 
 ### KDE Plasma
 ```bash
-sudo pacman -S plasma sddm konsole
+sudo pacman -S plasma sddm konsole git go wget
 sudo systemctl enable sddm.service
 ```
 
