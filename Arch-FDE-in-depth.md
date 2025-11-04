@@ -272,24 +272,6 @@ options root=PARTUUID=xxxx rw nowatchdog nvidia-drm.modeset=1
 # the nowatchdog flag makes it so you only have to enter the passsword for decrypting the drives one if you gave them all the same password
 ```
 
-Add pacman hook:
-```bash
-sudo nano /etc/pacman.d/hooks/nvidia.hook
-```
-```
-[Trigger]
-Operation=Install
-Operation=Upgrade
-Operation=Remove
-Type=Package
-Target=nvidia-open-dkms
-
-[Action]
-Depends=mkinitcpio
-When=PostTransaction
-Exec=/usr/bin/mkinitcpio -P
-```
-
 Reboot:
 ```bash
 exit
