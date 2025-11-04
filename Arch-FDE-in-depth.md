@@ -325,8 +325,8 @@ sudo rm -R yay
         sudo pacman-key --lsign-key 3056513887B78AEB
         sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
         sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-    # if this doesn't work visit https://aur.chaotic.cx/docs to setup the chaotic aur
-    ```
+      # if this doesn't work visit https://aur.chaotic.cx/docs to setup the chaotic aur
+      ```
      
    - Edit `/etc/pacman.conf` and add the following at the end:
      ```
