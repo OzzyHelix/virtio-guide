@@ -191,10 +191,10 @@ Include = /etc/pacman.d/mirrorlist
 
 pacman -Sy
 ```
-### Dracut/Mkinitcpio Configuration for FDE
+### Mkinitcpio Configuration for FDE
    - Install required packages for kernel image generation:
      ```bash
-     pacman -S dracut cryptsetup
+     pacman -S cryptsetup
      ```
    - Edit the Mkinitcpio configuration (`/etc/mkinitcpio.conf`) to ensure `encrypt` are included **before** the `filesystems` hook.
      - For Mkinitcpio, rebuild the images: `mkinitcpio -P`
