@@ -325,8 +325,8 @@ sudo rm -R yay
         sudo pacman-key --lsign-key 3056513887B78AEB
         sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
         sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-     ```
-     # if this doesn't work visit https://aur.chaotic.cx/docs to setup the chaotic aur
+    # if this doesn't work visit https://aur.chaotic.cx/docs to setup the chaotic aur
+    ```
      
    - Edit `/etc/pacman.conf` and add the following at the end:
      ```
@@ -358,7 +358,7 @@ export MAKEFLAGS="-j17 -l16"
 
 References:
 - [Arch Wiki](https://wiki.archlinux.org)
-- [Gloriuous eggroll's Blog](https://www.gloriouseggroll.tv/arch-linux-efi-install-guide/)
+- [Gloriuous Eggroll's Blog](https://www.gloriouseggroll.tv/arch-linux-efi-install-guide/)
 - [Tom’s Hardware Guide](http://www.tomshardware.com/faq/id-1860905/install-arch-linux-uefi.html)
 - [LinuxVeda](http://www.linuxveda.com/2014/06/07/arch-linux-tutorial/)
 - [ServerFault Discussion](http://serverfault.com/questions/5841/how-much-swap-space-on-a-high-memory-system)
