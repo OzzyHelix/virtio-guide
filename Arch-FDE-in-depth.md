@@ -332,6 +332,7 @@ sudo rm -R yay
      ```
      [chaotic-aur]
      Include = /etc/pacman.d/chaotic-mirrorlist
+     # I would recommend after doing this you should use pacman to install octopi to manage packages on the system
      ```
 
 ### Speed Up Compilation
