@@ -10,6 +10,9 @@ The draw back its not the best solution for apps that use anti-cheat software to
 # In-Depth Guide
 if you want a more in-depth guide on how to do all this I have it [here](https://github.com/OzzyHelix/virtio-guide/blob/main/in-depth.md).
 
+# Arch Linux FDE install Guide
+if you want an in depth guide on how to install Arch Linux by hand with full disk encryption I would recommend reading this [here](https://github.com/OzzyHelix/virtio-guide/blob/new-guide-dev/Arch-FDE-in-depth.md).
+
 # Note
 this contains UUIDs for my VMs its meant to be private so I can't lose Windows keys to people copying my VMs
 
