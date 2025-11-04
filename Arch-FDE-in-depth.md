@@ -254,7 +254,7 @@ initrd /initramfs-linux.img
 
 ### Network
 ```bash
-sudo pacman -S NetworkManager
+sudo pacman -S networkmanager
 sudo systemctl enable NetworkManager.service
 ```
 
@@ -268,11 +268,13 @@ Update modules:
 ```bash
 sudo nano /etc/mkinitcpio.conf
 # MODULES="nvidia nvidia_modeset nvidia_uvm nvidia_drm"
+# then run mkinitcpio -P to compile for all kernels
 ```
 
 Add kernel parameter:
 ```bash
-options root=PARTUUID=xxxx rw nvidia-drm.modeset=1
+options root=PARTUUID=xxxx rw nowatchdog nvidia-drm.modeset=1
+# the nowatchdog flag makes it so you only have to enter the passsword for decrypting the drives one if you gave them all the same password
 ```
 
 Add pacman hook:
