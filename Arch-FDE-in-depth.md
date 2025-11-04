@@ -248,7 +248,8 @@ pacman -Sy amd-ucode # for AMD
 ```
 Add to `/boot/loader/entries/arch.conf`:
 ```
-initrd /intel-ucode.img # or /amd-ucode.img if you have an AMD cpu
+initrd /intel-ucode.img
+# or initrd /amd-ucode.img if you have an AMD cpu
 initrd /initramfs-linux.img
 ```
 
