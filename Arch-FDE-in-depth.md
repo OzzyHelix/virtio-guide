@@ -326,6 +326,7 @@ sudo rm -R yay
         sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
         sudo pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
       # if this doesn't work visit https://aur.chaotic.cx/docs to setup the chaotic aur
+      # the chaotic aur is optional its just nice to not have to rebuild packages from the AUR
       ```
      
    - Edit `/etc/pacman.conf` and add the following at the end:
