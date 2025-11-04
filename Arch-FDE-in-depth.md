@@ -139,7 +139,7 @@ rankmirrors -n 6 /etc/pacman.d/mirrorlist.backup > /etc/pacman.d/mirrorlist
 ### Install Base System
 we will be using the zen kernel because it works with acs patch without patching the kernel
 ```bash
-pacstrap -i /mnt base base-devel nano zsh linux-zen linux-zen-headers linux-firmware
+pacstrap -i /mnt base base-devel nano zsh linux-zen linux-zen-headers linux-firmware zram-generator
 ```
 
 ### Generate fstab
@@ -153,9 +153,9 @@ Here will will be using UUIDs to set the `/etc/crypttab`
 ```bash
 # repeat this with the actual partition names of your encrypted partitions /dev/sda2 /dev/sda3 etc it will add it to cryptab
 # you will also start the echo command with what you want to name the /dev/mapper device as shown below
-echo "cryptroot UUID=$(blkid -s PARTUUID -o value /dev/nvme0n1p1) none  luks,discard,no-read-workqueue,no-write-workqueue" >> /mnt/etc/cryptab
+echo "cryptroot UUID=$(blkid -s UUID -o value /dev/nvme0n1p1) none  luks,discard,no-read-workqueue,no-write-workqueue" >> /mnt/etc/cryptab
 # you can review cryptab with this command
-cat /etc/crypttab
+cat /mnt/etc/crypttab
 ```
 ### Chroot into the System
 ```bash
@@ -231,7 +231,7 @@ initrd /initramfs-linux-zen.img
 now we do 
 ```bash
 # replace /dev/nvme0n1p1 with your root partition. you can find it with lsblk
-echo "options root=/dev/mapper/cryptroot cryptdevice=UUID=$(blkid -s PARTUUID -o value /dev/nvme0n1p1):cryptroot zswap.enabled=0 rw" nowatchdog
+echo "options root=/dev/mapper/cryptroot cryptdevice=UUID=$(blkid -s UUID -o value /dev/nvme0n1p1):cryptroot zswap.enabled=0 rw"
 # that will add the last part your boot loader entry
 ````
 
