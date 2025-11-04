@@ -295,7 +295,7 @@ sudo pacman -S mesa
 
 ### KDE Plasma, the AUR helper and the Web Browser
 ```bash
-sudo pacman -S plasma sddm konsole git go wget
+sudo pacman -S plasma sddm konsole git go wget firefox-developer-edition
 sudo systemctl enable sddm.service
 ```
 
