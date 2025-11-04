@@ -13,7 +13,7 @@ if you want a more in-depth guide on how to do all this I have it [here](https:/
 ## Arch Linux FDE install Guide
 if you want an in depth guide on how to install Arch Linux by hand with full disk encryption I would recommend reading this [here](https://github.com/OzzyHelix/virtio-guide/blob/new-guide-dev/Arch-FDE-in-depth.md).
 
-# Note
+## Note
 this contains UUIDs for my VMs its meant to be private so I can't lose Windows keys to people copying my VMs
 
 ### System Specs
