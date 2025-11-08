@@ -106,7 +106,7 @@ We will use **LUKS2** with strong parameters. While true quantum-safe algorithms
 ```bash
 mkfs.fat -F32 /dev/sda1
      # encrypt the root partition (e.g., /dev/sda2)
-     sudo cryptsetup luksFormat --type luks2 --c aes-xts-plain64 --key-size 512 --h sha256 --pbkdf argon2id --pbkdf-memory 1048576 --pbkdf-parallel 4 --pbkdf-force-iterations 4 /dev/sd2
+     sudo cryptsetup luksFormat --type luks2 --cipher aes-xts-plain64 --key-size 512 --hash sha256 --pbkdf argon2id --pbkdf-memory 1048576 --pbkdf-parallel 4 --pbkdf-force-iterations 4 /dev/sdX
      # Open the encrypted volume, naming it 'cryptroot'
      sudo cryptsetup open /dev/sda2 cryptroot
      mkfs.ext4 /dev/mapper/cryptroot # you can replace ext4 with btrfs or whatever filesystem you want
@@ -336,6 +336,10 @@ sudo rm -R yay
      # I would recommend after doing this you should use pacman to install octopi to manage packages on the system
      ```
 
+### VAAPI
+review this page from the Arch Wiki they do a better job explaining it than I ever could
+https://wiki.archlinux.org/title/Hardware_video_acceleration
+     
 ### Speed Up Compilation
 ```bash
 sudo pacman -S ccache
