@@ -254,6 +254,7 @@ sudo systemctl enable NetworkManager.service
 ```
 
 ### NVIDIA Drivers
+#### this only works for 20 series NVIDIA and up. you will need to install AUR packages for 10 series and 900 series NVIDIA graphics please reference the arch wiki for that
 ```bash
 sudo pacman -S linux-zen-headers
 sudo pacman -S nvidia-open-dkms hip-runtime-nvidia lib32-nvidia-utils lib32-opencl-nvidia libva-nvidia-driver nvidia-settings nvidia-utils opencl-nvidia
