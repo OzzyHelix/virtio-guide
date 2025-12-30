@@ -7,10 +7,13 @@
 VFIO allows people to run Windows for apps that simply can't run in Linux. Its a good solution for app compatibility. Its not perfect but it would allow people to run games and apps that will not run in Wine or Steam Proton.
 The draw back its not the best solution for apps that use anti-cheat software to protect multiplayer experiences.
 
-# In-Depth Guide
+## In-Depth Guide
 if you want a more in-depth guide on how to do all this I have it [here](https://github.com/OzzyHelix/virtio-guide/blob/main/in-depth.md).
 
-# Note
+## Arch Linux FDE install Guide
+if you want an in depth guide on how to install Arch Linux by hand with full disk encryption I would recommend reading this [here](https://github.com/OzzyHelix/virtio-guide/blob/new-guide-dev/Arch-FDE-in-depth.md).
+
+## Note
 this contains UUIDs for my VMs its meant to be private so I can't lose Windows keys to people copying my VMs
 
 ### System Specs
