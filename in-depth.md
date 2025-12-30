@@ -315,3 +315,8 @@ https://youtu.be/r2aUS-E-cKI
 
     in `/etc/sysctl.conf` on other distros but Arch is different
 once the vm.max_map_count value is increased you will find that wine and proton apps may run better
+
+### Arch Full Disk Encryption Install Guide
+#### I have a guide for install Arch with full disk encryption I would recommend doing it over ssh from another computer but here is the guide on how to install it.
+
+[Arch Full Disk Encryption Guide](https://github.com/OzzyHelix/virtio-guide/blob/new-guide-dev/Arch-FDE-in-depth.md).
