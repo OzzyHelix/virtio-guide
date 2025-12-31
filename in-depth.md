@@ -319,4 +319,4 @@ once the vm.max_map_count value is increased you will find that wine and proton 
 ### Arch Full Disk Encryption Install Guide
 #### I have a guide for install Arch with full disk encryption I would recommend doing it over ssh from another computer but here is the guide on how to install it.
 
-[Arch Full Disk Encryption Guide](https://github.com/OzzyHelix/virtio-guide/blob/new-guide-dev/Arch-FDE-in-depth.md).
+[Arch Full Disk Encryption Guide](https://github.com/OzzyHelix/virtio-guide/blob/main/Arch-FDE-in-depth.md).
