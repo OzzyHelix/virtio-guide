@@ -248,6 +248,8 @@ you need to do this to make you phyical cores be assigned to your virtual cores 
      ```
 
 ### Anti-Cheat Compatibility
+### ⚠️ There is a massive risk with this. if something goes wrong with this setup you can be banned at any time from any game from using this. 
+### if you accept the risk of that you can use this to play kernel level anti cheat games in a virtual machine if they are EAC or battleeye
 we do this so games like VRChat will run in our VM
 1. **Edit XML Configuration**
    - Add to `<os>`:
